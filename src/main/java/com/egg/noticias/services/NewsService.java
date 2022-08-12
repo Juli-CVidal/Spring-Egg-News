@@ -9,7 +9,8 @@ import com.egg.noticias.entities.News;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.repositories.JournalistRepository;
 import com.egg.noticias.repositories.NewsRepository;
-import java.util.Date;
+
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,17 +31,14 @@ public class NewsService {
     public void createNews(String title, String body, String photo, String journalistId) throws NewsException {
         validateData(title, body, photo, journalistId);
 
-        Optional<Journalist> journalist = journalistRepository.findById(journalistId);
-        if (!journalist.isPresent()) {
-            throw new NewsException("No journalist found");
-        }
-
         News newNews = new News();
         newNews.setTitle(title);
         newNews.setBody(body);
         newNews.setPhoto(photo);
-        newNews.setRelease(new Date());
-        newNews.setJournalist(journalist.get());
+        newNews.setReleaseDate(Calendar.getInstance());
+
+        Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
+        newNews.setJournalist(journalist);
 
         newsRepository.save(newNews);
     }
@@ -48,11 +46,11 @@ public class NewsService {
     @Transactional(readOnly = true)
     public News getNewsById(String id) throws NewsException {
         validateId(id);
-        Optional<News> returnedNews = newsRepository.findById(id);
-        if (!returnedNews.isPresent()) {
+        Optional<News> optNews = newsRepository.findById(id);
+        if (!optNews.isPresent()) {
             throw new NewsException("No news found");
         }
-        return returnedNews.get();
+        return optNews.get();
     }
 
     @Transactional(readOnly = true)
@@ -62,31 +60,32 @@ public class NewsService {
 
     @Transactional
     public void modifyNews(String id, String title, String body, String photo, String journalistId) throws NewsException {
-        validateId(id);
         validateData(title, body, photo, journalistId);
 
-        Optional<Journalist> returnedJournalist = journalistRepository.findById(journalistId);
-        if (!returnedJournalist.isPresent()) {
-            throw new NewsException("No journalist found");
-        }
+        News news = getNewsById(id);
+        news.setTitle(title);
+        news.setBody(body);
+        news.setPhoto(photo);
+        Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
+        news.setJournalist(journalist);
 
-        News newsToModify = getNewsById(id);
-        newsToModify.setTitle(title);
-        newsToModify.setBody(body);
-        newsToModify.setPhoto(photo);
-        newsToModify.setJournalist(returnedJournalist.get());
-
-        newsRepository.save(newsToModify);
+        newsRepository.save(news);
 
     }
 
     @Transactional
     public void deleteNews(String id) throws NewsException {
-        validateId(id);
-        News newsToDelete = getNewsById(id);
-        newsToDelete.setDeleted(true);
+        News news = getNewsById(id);
+        news.setDeleted(true);
 
-        newsRepository.save(newsToDelete);
+        newsRepository.save(news);
+    }
+
+    private Journalist getFromOptional(Optional optJournalist) throws NewsException {
+        if (!optJournalist.isPresent()) {
+            throw new NewsException("No journalist found");
+        }
+        return (Journalist) optJournalist.get();
     }
 
     private void validateData(String title, String body, String photo, String journalistId) throws NewsException {

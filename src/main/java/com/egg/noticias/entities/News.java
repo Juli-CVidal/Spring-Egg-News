@@ -4,7 +4,8 @@
 package com.egg.noticias.entities;
 
 // @author JulianCVidal
-import java.util.Date;
+
+import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "news")
-public class News{
+public class News {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -26,7 +27,7 @@ public class News{
     private String photo;
 
     @Temporal(TemporalType.DATE)
-    private Date release;
+    private Calendar releaseDate;
 
     @ManyToOne
     private Journalist journalist;
@@ -34,16 +35,6 @@ public class News{
     private Boolean deleted;
 
     public News() {
-    }
-
-    public News(String id, String title, String body, String photo, Date release, Journalist journalist, Boolean deleted) {
-        this.id = id;
-        this.title = title;
-        this.body = body;
-        this.photo = photo;
-        this.release = release;
-        this.journalist = journalist;
-        this.deleted = deleted;
     }
 
     public String getId() {
@@ -78,13 +69,15 @@ public class News{
         this.photo = photo;
     }
 
-    public Date getRelease() {
-        return release;
+    public Calendar getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRelease(Date release) {
-        this.release = release;
+    public void setReleaseDate(Calendar releaseDate) {
+        this.releaseDate = releaseDate;
     }
+
+ 
 
     public Journalist getJournalist() {
         return journalist;

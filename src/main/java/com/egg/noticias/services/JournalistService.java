@@ -37,11 +37,11 @@ public class JournalistService {
     @Transactional(readOnly = true)
     public Journalist getJournalistById(String id) throws NewsException {
         validateId(id);
-        Optional<Journalist> returnedJournalist = repository.findById(id);
-        if (!returnedJournalist.isPresent()) {
+        Optional<Journalist> optJournalist = repository.findById(id);
+        if (!optJournalist.isPresent()) {
             throw new NewsException("No journalist found");
         }
-        return returnedJournalist.get();
+        return optJournalist.get();
     }
 
     @Transactional(readOnly = true)
@@ -51,24 +51,22 @@ public class JournalistService {
 
     @Transactional
     public void modifyJournalist(String id, String name, String lastName, String photo) throws NewsException {
-        validateId(id);
         validateData(name, lastName, photo);
 
-        Journalist journalistToModify = getJournalistById(id);
-        journalistToModify.setName(name);
-        journalistToModify.setLastName(lastName);
-        journalistToModify.setPhoto(photo);
+        Journalist journalist = getJournalistById(id);
+        journalist.setName(name);
+        journalist.setLastName(lastName);
+        journalist.setPhoto(photo);
 
-        repository.save(journalistToModify);
+        repository.save(journalist);
     }
 
     @Transactional
     public void deleteJournalist(String id) throws NewsException {
-        validateId(id);
-        Journalist journalistToDelete = getJournalistById(id);
-        journalistToDelete.setDeleted(true);
-        
-        repository.save(journalistToDelete);
+        Journalist journalist = getJournalistById(id);
+        journalist.setDeleted(true);
+
+        repository.save(journalist);
     }
 
     private void validateData(String name, String lastName, String photo) throws NewsException {

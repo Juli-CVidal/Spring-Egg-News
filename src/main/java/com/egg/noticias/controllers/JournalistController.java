@@ -1,11 +1,9 @@
 /*
 // Curso Egg FullStack
  */
-
 package com.egg.noticias.controllers;
 
 // @author JulianCVidal
-
 import com.egg.noticias.entities.Journalist;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.services.JournalistService;
@@ -19,65 +17,76 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
 @RequestMapping("/journalist")
 public class JournalistController {
-    
+
     @Autowired
     private JournalistService service;
-    
+
     @GetMapping
-    public String showJournalists(ModelMap model){
+    public String showJournalists(ModelMap model) {
         List<Journalist> journalists = service.getAllJournalists();
         model.put("journalists", journalists);
         return "journalist-table";
     }
-    
+
     @GetMapping("/form")
-    public String getForm(){
+    public String getForm() {
         return "journalist-create";
     }
-    
+
     @GetMapping("/form/{code}")
-    public String getForm(@PathVariable String id, ModelMap model){
-        try{
+    public String getForm(@PathVariable String id, ModelMap model) {
+        try {
             Journalist journalist = service.getJournalistById(id);
             model.put("journalist", journalist);
-        } catch(NewsException ne){
+        } catch (NewsException ne) {
             return "redirect:/";
         }
         return "journalist-modify";
     }
-    
+
     @PostMapping("/create")
     public String createJournalist(
             @RequestParam String name, @RequestParam String lastName,
-            @RequestParam String photo, ModelMap model){
-        try{
+            @RequestParam String photo, ModelMap model) {
+
+        try {
             service.createJournalist(name, lastName, photo);
-            
-        }catch(NewsException ne){
+
+        } catch (NewsException ne) {
             model.put("error", ne.getMessage());
             return "journalist-create";
         }
         return "redirect:/journalist";
     }
-    
+
     @PostMapping("/modify/{code}")
     public String modifyJournalist(
             @PathVariable String id, @RequestParam String name,
             @RequestParam String lastName, @RequestParam String photo,
-            ModelMap model){
-        try{
+            ModelMap model) {
+
+        try {
             service.modifyJournalist(id, name, lastName, photo);
-            
-        }catch(NewsException ne){
+
+        } catch (NewsException ne) {
             model.put("error", ne.getMessage());
             return "journalist-modify";
         }
         return "redirect:/journalist";
-            
+
     }
-    
+
+    @PostMapping("/delete/{code}")
+    public String deleteJournalist(@PathVariable String id, ModelMap model) {
+        try {
+            service.deleteJournalist(id);
+        } catch (NewsException ne) {
+            model.put("error", ne.getMessage());
+            return "journalist-delete";
+        }
+        return "redirect:/journalist";
+    }
 }

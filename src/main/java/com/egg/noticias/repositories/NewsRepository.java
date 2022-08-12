@@ -14,9 +14,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NewsRepository extends JpaRepository<News, String> {
 
-    @Query("SELECT n FROM News WHERE n.deleted = false")
+    @Query("SELECT n FROM News n WHERE n.deleted = false")
     List<News> getAllNews();
 
+    @Query("SELECT n FROM News n WHERE n.id = :id")
+    News searchById(@Param("id") String id);
+    
     @Query("SELECT n FROM News n WHERE n.title = :title")
     News searchByTitle(@Param("title") String title);
 

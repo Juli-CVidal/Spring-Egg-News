@@ -2,15 +2,17 @@
 <!--
 // Curso Egg FullStack
 -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <link rel="stylesheet" href="../static/bootstrap.min.css" type="text/css"/>
-
         <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="bootstrap.min.css" type="text/css"/>
     </head>
     <body>
         <p class="lead"> LOGRADO CON EXITO </p>
+        <a th:href="@{news_create}" class="btn btn-warning">Modify</a>
     </body>
 </html>
