@@ -31,62 +31,86 @@ public class JournalistController {
         return "journalist-table";
     }
 
-    @GetMapping("/form")
+    @GetMapping("/create")
     public String getForm() {
-        return "journalist-create";
+        return "journalist-create.html";
     }
 
-    @GetMapping("/form/{code}")
-    public String getForm(@PathVariable String id, ModelMap model) {
+    @PostMapping("/add")
+    public String add(@RequestParam String name, @RequestParam String lastName,
+            //     @RequestParam String photo,
+            ModelMap model
+    ) {
         try {
-            Journalist journalist = service.getJournalistById(id);
-            model.put("journalist", journalist);
-        } catch (NewsException ne) {
-            return "redirect:/";
-        }
-        return "journalist-modify";
-    }
-
-    @PostMapping("/create")
-    public String createJournalist(
-            @RequestParam String name, @RequestParam String lastName,
-            @RequestParam String photo, ModelMap model) {
-
-        try {
-            service.createJournalist(name, lastName, photo);
+            service.createJournalist(name, lastName
+            //            ,photo
+            );
+            model.put("journalistAdded", "added successfully");
 
         } catch (NewsException ne) {
-            model.put("error", ne.getMessage());
-            return "journalist-create";
+            model.put("error", ne.toString());
+            return "create";
         }
         return "redirect:/journalist";
     }
 
-    @PostMapping("/modify/{code}")
-    public String modifyJournalist(
-            @PathVariable String id, @RequestParam String name,
-            @RequestParam String lastName, @RequestParam String photo,
-            ModelMap model) {
-
-        try {
-            service.modifyJournalist(id, name, lastName, photo);
-
-        } catch (NewsException ne) {
-            model.put("error", ne.getMessage());
-            return "journalist-modify";
-        }
-        return "redirect:/journalist";
-
-    }
-
-    @PostMapping("/delete/{code}")
-    public String deleteJournalist(@PathVariable String id, ModelMap model) {
-        try {
-            service.deleteJournalist(id);
-        } catch (NewsException ne) {
-            model.put("error", ne.getMessage());
-            return "journalist-delete";
-        }
-        return "redirect:/journalist";
-    }
+//
+//    @GetMapping("/form")
+//    public String getForm() {
+//        return "journalist-create";
+//    }
+//
+//    @GetMapping("/form/{code}")
+//    public String getForm(@PathVariable String id, ModelMap model) {
+//        try {
+//            Journalist journalist = service.getJournalistById(id);
+//            model.put("journalist", journalist);
+//        } catch (NewsException ne) {
+//            return "redirect:/";
+//        }
+//        return "journalist-modify";
+//    }
+//
+//    @PostMapping("/create")
+//    public String createJournalist(
+//            @RequestParam String name, @RequestParam String lastName,
+//            @RequestParam String photo, ModelMap model) {
+//
+//        try {
+//            service.createJournalist(name, lastName, photo);
+//
+//        } catch (NewsException ne) {
+//            model.put("error", ne.getMessage());
+//            return "journalist-create";
+//        }
+//        return "redirect:/journalist";
+//    }
+//
+//    @PostMapping("/modify/{code}")
+//    public String modifyJournalist(
+//            @PathVariable String id, @RequestParam String name,
+//            @RequestParam String lastName, @RequestParam String photo,
+//            ModelMap model) {
+//
+//        try {
+//            service.modifyJournalist(id, name, lastName, photo);
+//
+//        } catch (NewsException ne) {
+//            model.put("error", ne.getMessage());
+//            return "journalist-modify";
+//        }
+//        return "redirect:/journalist";
+//
+//    }
+//
+//    @PostMapping("/delete/{code}")
+//    public String deleteJournalist(@PathVariable String id, ModelMap model) {
+//        try {
+//            service.deleteJournalist(id);
+//        } catch (NewsException ne) {
+//            model.put("error", ne.getMessage());
+//            return "journalist-delete";
+//        }
+//        return "redirect:/journalist";
+//    }
 }

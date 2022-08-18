@@ -4,8 +4,8 @@
 package com.egg.noticias.entities;
 
 // @author JulianCVidal
-
 import java.util.Calendar;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,19 +13,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "news")
 public class News {
 
     @Id
-    @GeneratedValue(generator = "uuid")
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
     private String title;
     private String body;
-    private String photo;
 
+//    @Column(columnDefinition ="MEDIUMTEXT")
+//    private String photo;
     @Temporal(TemporalType.DATE)
     private Calendar releaseDate;
 
@@ -35,6 +38,7 @@ public class News {
     private Boolean deleted;
 
     public News() {
+            this.deleted = false;
     }
 
     public String getId() {
@@ -61,14 +65,13 @@ public class News {
         this.body = body;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
+//    public String getPhoto() {
+//        return photo;
+//    }
+//
+//    public void setPhoto(String photo) {
+//        this.photo = photo;
+//    }
     public Calendar getReleaseDate() {
         return releaseDate;
     }
@@ -76,8 +79,6 @@ public class News {
     public void setReleaseDate(Calendar releaseDate) {
         this.releaseDate = releaseDate;
     }
-
- 
 
     public Journalist getJournalist() {
         return journalist;

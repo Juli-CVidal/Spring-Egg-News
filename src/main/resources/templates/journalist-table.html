@@ -6,16 +6,17 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>TODO supply a title</title>
+        <title>Egg news!</title>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
             />
-
-        <link th:href="@{../css/index.css}" rel="stylesheet"></link>
+        
+        <link rel="stylesheet" th:href="@{../css/journalist.css}" type="text/css"/>
     </head>
+
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" th:href="@{/}">EggNews</a>
@@ -25,26 +26,31 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link disabled" th:href="@{/}">Home</a>
+                        <a class="nav-link" th:href="@{../}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/news}">News</a>
+                        <a class="nav-link" th:href="@{../news}">News</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/news/create}">Add a new</a>
+                        <a class="nav-link" th:href="@{../news/create}">Add a new</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/journalist}">Journalists</span></a>
+                        <a class="nav-link disabled" th:href="@{../journalist}">Journalists</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/journalist/create}">Register a journalist</a>
+                        <a class="nav-link" th:href="@{../journalist/create}">Register a journalist</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <h1 class="lead"> LOGRADO CON EXITO </h1>
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        ></script>
+        <h2 class="section-title">Our Journalists</h2>
+
+        <div class="media-scroller snaps-inline">
+            <div th:each="journalist : ${journalists}" class="media-element">
+                <p th:text="${journalist.name}"class="title"></p>
+                <p th:text="${journalist.lastName}"class="title"></p>
+            </div>
+
+        </div>
     </body>
 </html>

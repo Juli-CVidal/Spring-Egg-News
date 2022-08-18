@@ -22,14 +22,18 @@ public class JournalistService {
     private JournalistRepository repository;
 
     @Transactional
-    public void createJournalist(String name, String lastName, String photo) throws NewsException {
-        validateData(name, lastName, photo);
+    public void createJournalist(String name, String lastName
+    //            , String photo
+    ) throws NewsException {
+        validateData(name, lastName
+        //                , photo
+        );
 
         Journalist newJournalist = new Journalist();
 
         newJournalist.setName(name);
         newJournalist.setLastName(lastName);
-        newJournalist.setPhoto(photo);
+//        newJournalist.setPhoto(photo);
 
         repository.save(newJournalist);
     }
@@ -46,17 +50,21 @@ public class JournalistService {
 
     @Transactional(readOnly = true)
     public List<Journalist> getAllJournalists() {
-        return repository.findAll();
+        return repository.getAllJournalists();
     }
 
     @Transactional
-    public void modifyJournalist(String id, String name, String lastName, String photo) throws NewsException {
-        validateData(name, lastName, photo);
+    public void modifyJournalist(String id, String name, String lastName
+    //            , String photo
+    ) throws NewsException {
+        validateData(name, lastName
+        //                , photo
+        );
 
         Journalist journalist = getJournalistById(id);
         journalist.setName(name);
         journalist.setLastName(lastName);
-        journalist.setPhoto(photo);
+//        journalist.setPhoto(photo);
 
         repository.save(journalist);
     }
@@ -69,16 +77,18 @@ public class JournalistService {
         repository.save(journalist);
     }
 
-    private void validateData(String name, String lastName, String photo) throws NewsException {
+    private void validateData(String name, String lastName
+    //            , String photo
+    ) throws NewsException {
         if (null == name || name.isEmpty()) {
             throw new NewsException("No valid name entered");
         }
         if (null == lastName || lastName.isEmpty()) {
-            throw new NewsException("No valid lastname entered");
+            throw new NewsException("No valid surname entered");
         }
-        if (null == photo || photo.isEmpty()) {
-            throw new NewsException("No valid photo entered");
-        }
+//        if (null == photo || photo.isEmpty()) {
+//            throw new NewsException("No valid photo entered");
+//        }
     }
 
     private void validateId(String id) throws NewsException {

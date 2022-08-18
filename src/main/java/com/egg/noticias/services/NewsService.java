@@ -9,6 +9,8 @@ import com.egg.noticias.entities.News;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.repositories.JournalistRepository;
 import com.egg.noticias.repositories.NewsRepository;
+import java.io.IOException;
+import net.iharder.Base64;
 
 import java.util.Calendar;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class NewsService {
@@ -28,13 +31,17 @@ public class NewsService {
     private JournalistRepository journalistRepository;
 
     @Transactional
-    public void createNews(String title, String body, String photo, String journalistId) throws NewsException {
-        validateData(title, body, photo, journalistId);
+    public void createNews(String title, String body, 
+//            MultipartFile photo,
+            String journalistId) throws NewsException {
+        validateData(title, body, 
+//                photo,
+                journalistId);
 
         News newNews = new News();
         newNews.setTitle(title);
         newNews.setBody(body);
-        newNews.setPhoto(photo);
+//        addPhoto(newNews, photo);
         newNews.setReleaseDate(Calendar.getInstance());
 
         Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
@@ -55,17 +62,20 @@ public class NewsService {
 
     @Transactional(readOnly = true)
     public List<News> getAllNews() {
-        return newsRepository.findAll();
+        List<News> newsList = newsRepository.getAllNews();
+        return newsList;
     }
 
     @Transactional
-    public void modifyNews(String id, String title, String body, String photo, String journalistId) throws NewsException {
-        validateData(title, body, photo, journalistId);
+    public void modifyNews(String id, String title, String body, MultipartFile photo, String journalistId) throws NewsException {
+        validateData(title, body,
+//                photo, 
+                journalistId);
 
         News news = getNewsById(id);
         news.setTitle(title);
         news.setBody(body);
-        news.setPhoto(photo);
+//        addPhoto(news, photo);
         Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
         news.setJournalist(journalist);
 
@@ -88,16 +98,26 @@ public class NewsService {
         return (Journalist) optJournalist.get();
     }
 
-    private void validateData(String title, String body, String photo, String journalistId) throws NewsException {
+//    private void addPhoto(News news, MultipartFile photo) {
+//        try {
+//            news.setPhoto(Base64.encodeBytes(photo.getBytes()));
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace(System.out);
+//        }
+//    }
+
+    private void validateData(String title, String body,
+//            MultipartFile photo, 
+            String journalistId) throws NewsException {
         if (null == title || title.isEmpty()) {
             throw new NewsException("No valid title entered");
         }
         if (null == body || body.isEmpty()) {
             throw new NewsException("No body title entered");
         }
-        if (null == photo || photo.isEmpty()) {
-            throw new NewsException("No valid title entered");
-        }
+//        if (null == photo || photo.isEmpty()) {
+//            throw new NewsException("No valid title entered");
+//        }
         if (null == journalistId || journalistId.isEmpty()) {
             throw new NewsException("No valid journalist id entered");
         }
