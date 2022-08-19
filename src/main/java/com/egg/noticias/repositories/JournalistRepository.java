@@ -21,6 +21,10 @@ public interface JournalistRepository extends JpaRepository<Journalist, String> 
     @Query("SELECT j FROM Journalist j WHERE j.id = :id")
     Journalist searchById(@Param("id") String id);
     
+  //  @Query("SELECT j FROM Journalist j WHERE j.name = :name")
+   // Journalist searchByName(@Param("name") String name);
     @Query("SELECT j FROM Journalist j WHERE j.name = :name")
-    Journalist searchByName(@Param("name") String name);
+    List<Journalist> searchByName(@Param("name") String name);
+// Puede devolver una lista de periodistas con el mismo nombre
+// al no ser el nombre el PK
 }
