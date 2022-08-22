@@ -9,10 +9,7 @@ import com.egg.noticias.entities.News;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.repositories.JournalistRepository;
 import com.egg.noticias.repositories.NewsRepository;
-import java.io.IOException;
-import net.iharder.Base64;
-
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,18 +28,18 @@ public class NewsService {
     private JournalistRepository journalistRepository;
 
     @Transactional
-    public void createNews(String title, String body, 
-//            MultipartFile photo,
+    public void createNews(String title, String body,
+            //            MultipartFile photo,
             String journalistId) throws NewsException {
-        validateData(title, body, 
-//                photo,
+        validateData(title, body,
+                //                photo,
                 journalistId);
 
         News newNews = new News();
         newNews.setTitle(title);
         newNews.setBody(body);
 //        addPhoto(newNews, photo);
-        newNews.setReleaseDate(Calendar.getInstance());
+        newNews.setReleaseDate(new Date(System.currentTimeMillis()));
 
         Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
         newNews.setJournalist(journalist);
@@ -67,9 +64,11 @@ public class NewsService {
     }
 
     @Transactional
-    public void modifyNews(String id, String title, String body, MultipartFile photo, String journalistId) throws NewsException {
+    public void modifyNews(String id, String title, String body,
+//            MultipartFile photo, 
+            String journalistId) throws NewsException {
         validateData(title, body,
-//                photo, 
+                //                photo, 
                 journalistId);
 
         News news = getNewsById(id);
@@ -105,9 +104,8 @@ public class NewsService {
 //            ioe.printStackTrace(System.out);
 //        }
 //    }
-
     private void validateData(String title, String body,
-//            MultipartFile photo, 
+            //            MultipartFile photo, 
             String journalistId) throws NewsException {
         if (null == title || title.isEmpty()) {
             throw new NewsException("No valid title entered");

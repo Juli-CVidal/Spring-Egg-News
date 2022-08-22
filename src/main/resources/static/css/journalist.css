@@ -1,5 +1,5 @@
-@import "journalist_aux1.css";
-@import "journalist_aux2.css";
+@import "https://unpkg.com/open-props";
+@import "https://unpkg.com/open-props/normalize.min.css";
 
 body{
     background-color: #4c4177;

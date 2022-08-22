@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,21 +64,40 @@ public class NewsController {
         }
         return "redirect:/news";
     }
-//
-//    @PostMapping("/modify/{code}")
-//    public String modifyNews(@PathVariable String id, @RequestParam String title,
-//            @RequestParam String body, @RequestParam String photo,
-//            @RequestParam String journalistId, ModelMap model) {
-//
-//        try {
-//            service.modifyNews(id, title, body, photo, journalistId);
-//
-//        } catch (NewsException ne) {
-//            model.put("error", ne.getMessage());
-//            return "news-modify";
-//        }
-//        return "redirect:/news";
-//    }
+
+    
+    
+    
+    @GetMapping("/modify/{id}")
+    public String modifyNews(@PathVariable String id, ModelMap model) {
+
+        try {
+            News news = newsService.getNewsById(id);
+            model.put("news", news);
+            List<Journalist> journalists = journalistService.getAllJournalists();
+            model.put("journalists", journalists);
+        } catch (NewsException ne) {
+            model.put("error", ne.getMessage());
+            return "/";
+        }
+        return "news-modify";
+    }
+    
+    @PostMapping("/modify/{id}")
+    public String modifyNews(@PathVariable String id, @RequestParam String title,
+            @RequestParam String body,
+//            @RequestParam String photo,
+            @RequestParam String journalistId, ModelMap model){
+        
+        try{
+            newsService.modifyNews(id, title, body, journalistId);
+            
+        }catch(NewsException ne){
+            model.put("error", ne.toString());
+            return "news-modify";
+        }
+        return "redirect:/news";
+    }
 //
 //    @PostMapping("/delete/{code}")
 //    public String deleteNews(@PathVariable String id, ModelMap model) {

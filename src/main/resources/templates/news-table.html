@@ -48,12 +48,37 @@
             <div class="timeline">
                 <div class="line"></div>
                 <div th:each="news : ${newsList}" class="section">
-                    <div class="bead"></div>
+                    <div class="circle bead">
+                        <div class="date">
+                            <span th:text="${news.releaseDate.getDate()}"></span>
+                            /
+                            <span th:text="${news.releaseDate.getMonth()}"></span>
+                        </div>
+                    </div>
                     <div class="content">
                         <h2 th:text="${news.title}"></h2>
                         <p th:text="${news.body}"></p>
                         <p th:text="${news.journalist.name}"></p>
+                        <div style="float:left">
+                            <a class="btn btn-outline-warning btn-sm"
+                               th:href="@{../news/modify/__${news.id}__}">
+                                Modify
+                            </a>
+                        </div>
+                        <div style="float:left">
+
+                            <form th:action="@{../news/delete/__${news.id}__}" methor="POST">
+                                <button class="btn btn-outline-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
                     </div>
+
+                </div>
+                <div class="section">
+                    <a th:href="@{../news/create}" class="bead bigCircle">
+                        <br/>
+                        CREATE
+                    </a>
                 </div>
             </div>
         </div>

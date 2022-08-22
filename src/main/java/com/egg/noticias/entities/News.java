@@ -4,7 +4,7 @@
 package com.egg.noticias.entities;
 
 // @author JulianCVidal
-import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +30,7 @@ public class News {
 //    @Column(columnDefinition ="MEDIUMTEXT")
 //    private String photo;
     @Temporal(TemporalType.DATE)
-    private Calendar releaseDate;
+    private Date releaseDate;
 
     @ManyToOne
     private Journalist journalist;
@@ -38,7 +38,7 @@ public class News {
     private Boolean deleted;
 
     public News() {
-            this.deleted = false;
+        this.deleted = false;
     }
 
     public String getId() {
@@ -72,11 +72,11 @@ public class News {
 //    public void setPhoto(String photo) {
 //        this.photo = photo;
 //    }
-    public Calendar getReleaseDate() {
+    public Date getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Calendar releaseDate) {
+    public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 
