@@ -36,7 +36,7 @@ body{
     gap: var(--_spacer);
     padding: var(--_spacer);
     background: var(--surface-2);
-    border-radius: var(--radius-2);
+    border-radius: 15px;
     box-shadow: var(--shadow-2);
 }
 

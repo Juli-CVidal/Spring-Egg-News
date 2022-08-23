@@ -9,6 +9,7 @@ import com.egg.noticias.entities.News;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.services.JournalistService;
 import com.egg.noticias.services.NewsService;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,14 +36,14 @@ public class NewsController {
         List<News> newsList = newsService.getAllNews();
         System.out.println("Hay " + newsList.size() + " noticias");
         model.put("newsList", newsList);
-        return "news-table.html";
+        return "news-table";
     }
 
     @GetMapping("/create")
     public String getForm(ModelMap model) {
         List<Journalist> journalists = journalistService.getAllJournalists();
         model.addAttribute("journalists", journalists);
-        return "news-create.html";
+        return "news-create";
     }
 
     @PostMapping("/add")
@@ -73,12 +74,13 @@ public class NewsController {
 
         try {
             News news = newsService.getNewsById(id);
+            
             model.put("news", news);
             List<Journalist> journalists = journalistService.getAllJournalists();
             model.put("journalists", journalists);
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());
-            return "/";
+            return "news-table";
         }
         return "news-modify";
     }
@@ -98,16 +100,16 @@ public class NewsController {
         }
         return "redirect:/news";
     }
-//
-//    @PostMapping("/delete/{code}")
-//    public String deleteNews(@PathVariable String id, ModelMap model) {
-//        try {
-//            service.deleteNews(id);
-//
-//        } catch (NewsException ne) {
-//            model.put("error", ne.getMessage());
-//            return "news-delete";
-//        }
-//        return "redirect:/news";
-//    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteNews(@PathVariable String id, ModelMap model) {
+        try {
+            newsService.deleteNews(id);
+
+        } catch (NewsException ne) {
+            model.put("error", ne.getMessage());
+            return "news-table";
+        }
+        return "redirect:/news";
+    }
 }

@@ -65,7 +65,7 @@ public class NewsService {
 
     @Transactional
     public void modifyNews(String id, String title, String body,
-//            MultipartFile photo, 
+            //            MultipartFile photo, 
             String journalistId) throws NewsException {
         validateData(title, body,
                 //                photo, 
@@ -74,6 +74,7 @@ public class NewsService {
         News news = getNewsById(id);
         news.setTitle(title);
         news.setBody(body);
+        news.setReleaseDate(new Date(System.currentTimeMillis()));
 //        addPhoto(news, photo);
         Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
         news.setJournalist(journalist);

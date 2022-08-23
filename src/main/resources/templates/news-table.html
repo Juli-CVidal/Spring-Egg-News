@@ -30,7 +30,7 @@
                         <a class="nav-link disabled" th:href="@{../news}">News</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{../news/create}">Add a new</a>
+                        <a class="nav-link" th:href="@{../news/create}">Add a news</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{../journalist}">Journalists</span></a>
@@ -41,47 +41,43 @@
                 </ul>
             </div>
         </nav>
-        <div class="container">
-            <div class="top-section">
-                <h1>Enjoy the news!!</h1>
-            </div>
-            <div class="timeline">
-                <div class="line"></div>
-                <div th:each="news : ${newsList}" class="section">
-                    <div class="circle bead">
-                        <div class="date">
-                            <span th:text="${news.releaseDate.getDate()}"></span>
-                            /
-                            <span th:text="${news.releaseDate.getMonth()}"></span>
-                        </div>
+        <section class="timeline-section">
+            <div class="timeline-items">
+                <div th:each="news: ${newsList}"  class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">
+                        <span th:text="${news.releaseDate.getDate()}"></span>
+                        /
+                        <span th:text="${news.releaseDate.getMonth()}"></span>
                     </div>
-                    <div class="content">
-                        <h2 th:text="${news.title}"></h2>
+                    <div class="timeline-content">
+                        <h3 th:text="${news.title}"></h3>
                         <p th:text="${news.body}"></p>
                         <p th:text="${news.journalist.name}"></p>
-                        <div style="float:left">
+
+                        <div style="float: left">
                             <a class="btn btn-outline-warning btn-sm"
                                th:href="@{../news/modify/__${news.id}__}">
                                 Modify
                             </a>
                         </div>
-                        <div style="float:left">
+                        <div style="float: right">
 
-                            <form th:action="@{../news/delete/__${news.id}__}" methor="POST">
+                            <form th:action="@{../news/delete/__${news.id}__}" method="POST">
                                 <button class="btn btn-outline-danger btn-sm">Delete</button>
                             </form>
                         </div>
+                        <br>
                     </div>
+                </div>
 
-                </div>
-                <div class="section">
-                    <a th:href="@{../news/create}" class="bead bigCircle">
-                        <br/>
-                        CREATE
-                    </a>
-                </div>
             </div>
-        </div>
+            <div class="col-md-2 form-group mb-3" id="timeline-button">
+                <a th:href="@{../news/create}" class="btn btn-block btn-primary rounded-0 py-2 px-4">
+                    CREATE
+                </a>
+            </div>
+        </section>
         <script
             th:src="@{../js/timeline.js}"
         ></script>

@@ -64,7 +64,7 @@ public class JournalistController {
 
         } catch (NewsException ne) {
             model.put("error", ne.toString());
-            return "create";
+            return "journalist-table";
 
         }
         return "journalist-modify";
@@ -89,15 +89,15 @@ public class JournalistController {
         return "redirect:/journalist";
 
     }
-//
-//    @PostMapping("/delete/{code}")
-//    public String deleteJournalist(@PathVariable String id, ModelMap model) {
-//        try {
-//            service.deleteJournalist(id);
-//        } catch (NewsException ne) {
-//            model.put("error", ne.getMessage());
-//            return "journalist-delete";
-//        }
-//        return "redirect:/journalist";
-//    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteJournalist(@PathVariable String id, ModelMap model) {
+        try {
+            service.deleteJournalist(id);
+        } catch (NewsException ne) {
+            model.put("error", ne.getMessage());
+            return "journalist-table";
+        }
+        return "redirect:/journalist";
+    }
 }
