@@ -4,15 +4,13 @@
 package com.egg.noticias.entities;
 
 // @author JulianCVidal
-import java.util.Date;
-import javax.persistence.Column;
+import com.egg.noticias.configs.Roles;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,25 +22,18 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "news")
-public class News {
+@Table(name = "user")
+public class NewsUser {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
-
-    private String title;
-    private String body;
-
-//    @Column(columnDefinition ="MEDIUMTEXT")
-//    private String photo;
-    @Temporal(TemporalType.DATE)
-    private Date releaseDate;
-
-    @ManyToOne
-    private Journalist journalist;
-
-    private boolean deleted;
-
+    
+    private String name;
+    private String email;
+    private String password;
+    
+    @Enumerated(EnumType.STRING)
+    private Roles role;
 }

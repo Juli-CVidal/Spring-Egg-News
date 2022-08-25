@@ -66,15 +66,12 @@ public class NewsController {
         return "redirect:/news";
     }
 
-    
-    
-    
     @GetMapping("/modify/{id}")
     public String modifyNews(@PathVariable String id, ModelMap model) {
 
         try {
             News news = newsService.getNewsById(id);
-            
+
             model.put("news", news);
             List<Journalist> journalists = journalistService.getAllJournalists();
             model.put("journalists", journalists);
@@ -84,18 +81,18 @@ public class NewsController {
         }
         return "news-modify";
     }
-    
+
     @PostMapping("/modify/{id}")
     public String modifyNews(@PathVariable String id, @RequestParam String title,
             @RequestParam String body,
-//            @RequestParam String photo,
-            @RequestParam String journalistId, ModelMap model){
-        
-        try{
+            //            @RequestParam String photo,
+            @RequestParam String journalistId, ModelMap model) {
+
+        try {
             newsService.modifyNews(id, title, body, journalistId);
-            
-        }catch(NewsException ne){
-            model.put("error", ne.toString());
+
+        } catch (NewsException ne) {
+            model.put("error", ne.getMessage());
             return "news-modify";
         }
         return "redirect:/news";

@@ -42,6 +42,11 @@
                 </ul>
             </div>
         </nav>
+        <div th:if="${null != logged}" class="card text-white bg-success mb-3 mt-3">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${logged}"></h5>
+            </div>
+        </div>
         <h1 align="center"> Welcome to egg news! </h1>
         <h3>Use the navbar to see the news!</h3>
         <script

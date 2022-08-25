@@ -8,8 +8,6 @@ import com.egg.noticias.entities.Journalist;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.services.JournalistService;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,7 +48,7 @@ public class JournalistController {
             model.put("journalistAdded", "added successfully");
 
         } catch (NewsException ne) {
-            model.put("error", ne.toString());
+            model.put("error", ne.getMessage());
             return "create";
         }
         return "redirect:/journalist";
@@ -63,7 +61,7 @@ public class JournalistController {
             model.put("journalist", journalist);
 
         } catch (NewsException ne) {
-            model.put("error", ne.toString());
+            model.put("error", ne.getMessage());
             return "journalist-table";
 
         }
