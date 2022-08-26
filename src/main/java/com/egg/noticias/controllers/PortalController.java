@@ -7,6 +7,7 @@ package com.egg.noticias.controllers;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.services.NewsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +23,8 @@ public class PortalController {
     private NewsUserService userService;
 
     @GetMapping("/")
-    public String index(
-//            @RequestParam(required = false) String logged, ModelMap model
-    ) {
+    public String index( //            @RequestParam(required = false) String logged, ModelMap model
+            ) {
         return "index.html";
     }
 
@@ -45,17 +45,24 @@ public class PortalController {
             ModelMap model) {
         try {
             userService.signup(name, email, password, confirm);
+            model.put("action", "sign_in");
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());
             model.put("action", "sign_up");
+        } finally {
             return "logs.html";
         }
-        return "/";
     }
 
     @GetMapping("/sign_up")
     public String signinForm(ModelMap model) {
         model.put("action", "sign_up");
         return "logs.html";
+    }
+    
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_JOURNALIST')")
+    @GetMapping("/logged-index")
+    public String loggedIndex() {
+        return "logged-index.html";
     }
 }

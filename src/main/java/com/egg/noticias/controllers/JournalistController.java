@@ -51,6 +51,7 @@ public class JournalistController {
             model.put("error", ne.getMessage());
             return "create";
         }
+        System.out.println("acá toy");
         return "redirect:/journalist";
     }
 
