@@ -15,37 +15,32 @@
             />
 
         <link rel="stylesheet" th:href="@{../css/journalist.css}" type="text/css"/>
+         <link rel='stylesheet' th:href="@{../css/navbar.css}"/>
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" th:href="@{../logged-index}">EggNews</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{../logged-index}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{../news}">News</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{../news/create}">Add a news</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" th:href="@{../journalist}">Journalists</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{../journalist/create}">Register a journalist</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{../logout}">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+          <nav>
+
+            <ul>
+                <li>
+                    <a th:href="@{../logged-index}">Home</a>
+                </li>
+                <li>
+                    <a th:href="@{../news}">News</a>
+                </li>
+                <li >
+                    <a th:href="@{../news/create}">Add a news</a>
+                </li>
+                <li >
+                    <a  th:href="@{../journalist}">Journalists</span></a>
+                </li>
+                <li >
+                    <a  th:href="@{../journalist/create}">Register a journalist</a>
+                </li>
+
+            </ul>
+
+          </nav>
 
         <h2 class="section-title">Our Journalists</h2>
 

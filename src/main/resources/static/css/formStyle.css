@@ -3,15 +3,15 @@
 
 body {
     font-family: 'Arimo', sans-serif;
-
     background-color: #efefef;
     line-height: 1.9;
     color: #8c8c8c;
     position: relative;
-       background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     background-size: 400% 400%;
     animation: gradient 25s ease infinite;
-   background-repeat: no-repeat;
+    background-repeat: no-repeat;
+    overflow-y: hidden;
 }
 
 @keyframes gradient {
@@ -64,7 +64,7 @@ a, a:hover {
 
 
 .contact-wrap {
-    border-radius: 20px !important;
+    border-radius: 15px !important;
     -webkit-box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.2);
     background: #F2eee3;
