@@ -34,5 +34,4 @@ public class Journalist {
 //    @Column(columnDefinition ="MEDIUMTEXT")
 //    private String photo;
     private boolean deleted;
-
 }

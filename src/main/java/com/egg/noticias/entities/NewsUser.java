@@ -4,7 +4,7 @@
 package com.egg.noticias.entities;
 
 // @author JulianCVidal
-import com.egg.noticias.configs.Roles;
+import com.egg.noticias.enums.Roles;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -36,4 +36,6 @@ public class NewsUser {
     
     @Enumerated(EnumType.STRING)
     private Roles role;
+    
+    private boolean deleted;
 }

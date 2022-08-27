@@ -13,72 +13,55 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
             />
-        <link rel="stylesheet" th:href="@{../css/timeline.css}" type="text/css"/>
-         <link rel='stylesheet' th:href="@{../css/navbar.css}"/>
+
+        <link rel='stylesheet' th:href="@{/css/navbar.css}"/>
+        <link rel="stylesheet" th:href="@{/css/news.css}" type="text/css"/>
     </head>
     <body>
-        <nav>
-            <ul>
-                <li>
-                    <a th:href="@{/logged-index}">Home</a>
-                </li>
-                <li>
-                    <a th:href="@{../news}">News</a>
-                </li>
-                <li >
-                    <a th:href="@{../news/create}">Add a news</a>
-                </li>
-                <li >
-                    <a  th:href="@{../journalist}">Journalists</span></a>
-                </li>
-                <li >
-                    <a  th:href="@{../journalist/create}">Register a journalist</a>
-                </li>
-                <li>
-                    <a class="nav-link" th:href="@{../logout}">Logout</a>
-                </li>
-
-            </ul>
-        </nav>
-        <section class="timeline-section">
-            <div class="timeline-items">
-                <div th:each="news: ${newsList}"  class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">
+        <nav th:replace="/fragments/navbar :: nav"></nav>
+        <div th:each="news : ${newsList}" class="blog-card">
+            <div class="meta">
+                <div class="photo"></div>
+                <ul class="details">
+                    <li class="author">
+                        <span>&#128100</span>
+                        <span th:text="${news.journalist.lastName}"></span>
+                        , 
+                        <span th:text="${news.journalist.name}"></span>
+                    </li>
+                    <li class="date">
+                        <span>&#128197</span>
                         <span th:text="${news.releaseDate.getDate()}"></span>
                         /
                         <span th:text="${news.releaseDate.getMonth()}"></span>
-                    </div>
-                    <div class="timeline-content">
-                        <h3 th:text="${news.title}"></h3>
-                        <p th:text="${news.body}"></p>
-                        <p th:text="${news.journalist.name}"></p>
-
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN')">
                         <div style="float: left">
                             <a class="btn btn-outline-warning btn-sm"
                                th:href="@{../news/modify/__${news.id}__}">
                                 Modify
                             </a>
                         </div>
-                        <div style="float: right">
+                        <div style="float: right; margin-right: 10px">
 
                             <form th:action="@{../news/delete/__${news.id}__}" method="POST">
                                 <button class="btn btn-outline-danger btn-sm">Delete</button>
                             </form>
                         </div>
-                        <br>
-                    </div>
-                </div>
 
+                    </li>
+                </ul>
             </div>
+            <div class="description">
+                <h1 th:text="${news.title}"></h1>
+                <p th:text="${news.body}"></p>
+            </div>
+        </div>
 
-            <a th:href="@{../news/create}" class="button">
-                CREATE
-            </a>
 
-        </section>
-        <script
-            th:src="@{../js/timeline.js}"
-        ></script>
+
+        <a th:href="@{../news/create}" class="button">
+            CREATE
+        </a>
     </body>
 </html>

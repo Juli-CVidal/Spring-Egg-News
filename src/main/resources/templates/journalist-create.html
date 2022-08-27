@@ -3,46 +3,9 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        <!-- Bootstrap CSS -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            />
-
-        <!-- Style -->
-        <link rel="stylesheet" th:href="@{../css/formStyle.css}"/>
-        <link rel='stylesheet' th:href="@{../css/navbar.css}"/>
-
-        <title>Registering a journalist!</title>
-    </head>
+    <head th:replace="/fragments/formsHead ::head"></head>
     <body>
-        <nav>
-
-            <ul>
-                <li>
-                    <a th:href="@{../logged-index}">Home</a>
-                </li>
-                <li>
-                    <a th:href="@{../news}">News</a>
-                </li>
-                <li >
-                    <a th:href="@{../news/create}">Add a news</a>
-                </li>
-                <li >
-                    <a  th:href="@{../journalist}">Journalists</span></a>
-                </li>
-                <li >
-                    <a  th:href="@{../journalist/create}">Register a journalist</a>
-                </li>
-
-            </ul>
-
-        </nav>
+        <nav th:replace="/fragments/navbar :: nav"></nav>
 
         <div class="content">
             <div class="container">

@@ -22,17 +22,16 @@ public class JournalistService {
     private JournalistRepository repository;
 
     @Transactional
-    public void createJournalist(String name, String lastName
+    public void createJournalist(String name
     //            , String photo
     ) throws NewsException {
-        validateData(name, lastName
+        validateData(name
         //                , photo
         );
 
         Journalist newJournalist = new Journalist();
 
         newJournalist.setName(name);
-        newJournalist.setLastName(lastName);
 //        newJournalist.setPhoto(photo);
 
         repository.save(newJournalist);
@@ -54,16 +53,15 @@ public class JournalistService {
     }
 
     @Transactional
-    public void modifyJournalist(String id, String name, String lastName
+    public void modifyJournalist(String id, String name
     //            , String photo
     ) throws NewsException {
-        validateData(name, lastName
+        validateData(name
         //                , photo
         );
 
         Journalist journalist = getJournalistById(id);
         journalist.setName(name);
-        journalist.setLastName(lastName);
 //        journalist.setPhoto(photo);
 
         repository.save(journalist);
@@ -77,14 +75,11 @@ public class JournalistService {
         repository.save(journalist);
     }
 
-    private void validateData(String name, String lastName
+    private void validateData(String name
     //            , String photo
     ) throws NewsException {
         if (null == name || name.isEmpty()) {
             throw new NewsException("No valid name entered");
-        }
-        if (null == lastName || lastName.isEmpty()) {
-            throw new NewsException("No valid surname entered");
         }
 //        if (null == photo || photo.isEmpty()) {
 //            throw new NewsException("No valid photo entered");

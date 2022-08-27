@@ -18,12 +18,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
-    
+
     @Autowired
     private NewsUserService userService;
-    
+
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
@@ -31,18 +31,23 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/css/*", "/js/*", "/img/*", "/**")
-                .permitAll()
+                .antMatchers("/admin/*").hasRole("ADMIN")
+                .antMatchers("/news/*").hasAnyRole("ADMIN", "JOURNALIST")
+                .antMatchers("/journalist/*").hasAnyRole("ADMIN","JOURNALIST")
+                .antMatchers("/css/*", "/js/*", "/imgs/*", "/**")
+                    .permitAll()
                 .and().formLogin()
                     .loginPage("/sign_in")
                     .loginProcessingUrl("/signin")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    .defaultSuccessUrl("/logged-index")
+                    .defaultSuccessUrl("/")
                     .permitAll()
                 .and().logout()
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
-                    .permitAll();
+                    .logoutSuccessUrl("/sign_in")
+                    .permitAll()
+                .and().csrf()
+                    .disable();
     }
 }

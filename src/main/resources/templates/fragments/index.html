@@ -1,0 +1,39 @@
+<div>
+    <div th:if="${null == session.userSession}" class="content">
+        <div class="container">
+            <div class="row align-items-stretch justify-content-center no-gutters">
+                <div class="col-md-7">
+                    <div class="form h-100 contact-wrap p-5">
+                        <div class="row">
+
+                            <h3 class="text-center">Welcome to eggNews!</h3>
+
+
+                            <div class="col-md-6 form-group mb-3 text-center">
+                                <h4>Have an account?</h4>
+
+                                <a class="button" th:href="@{/sign_in}">Sign In!</a>
+
+                            </div>
+                            <div class="col-md-6 form-group mb-3 text-center">
+                                <h4>Want to create one?</h4>
+
+                                <a class="button" th:href="@{/sign_up}" >Sign Up!</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:unless="${null == session.userSession}" class="row justify-content-center" style="width:100%; heigh:100%">
+        <div class="container">
+            <div class="row align-items-stretch justify-content-center no-gutters">
+                <h1 align="center"> Welcome to egg news! </h1>
+                <h3>Use the navbar to see the news!</h3>
+            </div>
+        </div>
+    </div>
+</div>

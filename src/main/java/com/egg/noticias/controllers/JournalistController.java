@@ -33,16 +33,16 @@ public class JournalistController {
 
     @GetMapping("/create")
     public String getForm() {
-        return "journalist-create.html";
+        return "journalist-create";
     }
 
     @PostMapping("/add")
-    public String add(@RequestParam String name, @RequestParam String lastName,
+    public String add(@RequestParam String name,
             //     @RequestParam String photo,
             ModelMap model
     ) {
         try {
-            service.createJournalist(name, lastName
+            service.createJournalist(name
             //            ,photo
             );
             model.put("journalistAdded", "added successfully");
@@ -51,7 +51,6 @@ public class JournalistController {
             model.put("error", ne.getMessage());
             return "create";
         }
-        System.out.println("acá toy");
         return "redirect:/journalist";
     }
 
@@ -72,12 +71,11 @@ public class JournalistController {
     @PostMapping("/modify/{id}")
     public String modifyJournalist(
             @PathVariable String id, @RequestParam String name,
-            @RequestParam String lastName,
             //            @RequestParam String photo,
             ModelMap model) {
 
         try {
-            service.modifyJournalist(id, name, lastName
+            service.modifyJournalist(id, name
             //                    , photo
             );
 

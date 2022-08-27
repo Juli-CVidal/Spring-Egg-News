@@ -4,8 +4,11 @@
 package com.egg.noticias.controllers;
 
 // @author JulianCVidal
+import com.egg.noticias.entities.NewsUser;
+import com.egg.noticias.enums.Roles;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.services.NewsUserService;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,47 +25,51 @@ public class PortalController {
     @Autowired
     private NewsUserService userService;
 
-    @GetMapping("/")
-    public String index( //            @RequestParam(required = false) String logged, ModelMap model
-            ) {
-        return "index.html";
-    }
-
     @GetMapping("/sign_in")
-    public String loginForm(@RequestParam(required = false) String error, ModelMap model) {
+    public String signInForm(@RequestParam(required = false) String error, ModelMap model) {
         if (null != error) {
             model.put("error", "Incorrect username or password");
         }
         model.put("action", "sign_in");
+        model.put("roles", Roles.values());
+        return "logs.html";
+    }
+
+    @GetMapping("/sign_up")
+    public String signUpForm(ModelMap model) {
+        model.put("roles", Roles.values());
+        model.put("action", "sign_up");
         return "logs.html";
     }
 
     @PostMapping("/signup")
-    public String signupUser(@RequestParam String name,
+    public String signUpUser(
+            @RequestParam String name,
             @RequestParam String email,
             @RequestParam String password,
             String confirm,
+            @RequestParam Roles role,
             ModelMap model) {
+
         try {
-            userService.signup(name, email, password, confirm);
+            userService.signup(name, email, password, confirm, role);
             model.put("action", "sign_in");
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());
+            model.put("name", name);
             model.put("action", "sign_up");
         } finally {
-            return "logs.html";
+            model.put("roles", Roles.values());
+            model.put("email", email);
         }
-    }
-
-    @GetMapping("/sign_up")
-    public String signinForm(ModelMap model) {
-        model.put("action", "sign_up");
         return "logs.html";
     }
     
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_JOURNALIST')")
-    @GetMapping("/logged-index")
-    public String loggedIndex() {
-        return "logged-index.html";
+
+    @GetMapping("/")
+    public String index( //            @RequestParam(required = false) String logged, ModelMap model
+            HttpSession session) {
+        NewsUser user = (NewsUser) session.getAttribute("userSession");
+        return "index.html";
     }
 }

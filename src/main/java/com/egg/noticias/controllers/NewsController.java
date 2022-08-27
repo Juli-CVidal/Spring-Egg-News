@@ -34,7 +34,6 @@ public class NewsController {
     @GetMapping
     public String showNews(ModelMap model) {
         List<News> newsList = newsService.getAllNews();
-        System.out.println("Hay " + newsList.size() + " noticias");
         model.put("newsList", newsList);
         return "news-table";
     }

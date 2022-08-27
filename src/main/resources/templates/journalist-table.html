@@ -15,42 +15,17 @@
             />
 
         <link rel="stylesheet" th:href="@{../css/journalist.css}" type="text/css"/>
-         <link rel='stylesheet' th:href="@{../css/navbar.css}"/>
+        <link rel='stylesheet' th:href="@{../css/navbar.css}"/>
     </head>
 
     <body>
-          <nav>
-
-            <ul>
-                <li>
-                    <a th:href="@{../logged-index}">Home</a>
-                </li>
-                <li>
-                    <a th:href="@{../news}">News</a>
-                </li>
-                <li >
-                    <a th:href="@{../news/create}">Add a news</a>
-                </li>
-                <li >
-                    <a  th:href="@{../journalist}">Journalists</span></a>
-                </li>
-                <li >
-                    <a  th:href="@{../journalist/create}">Register a journalist</a>
-                </li>
-
-            </ul>
-
-          </nav>
-
-        <h2 class="section-title">Our Journalists</h2>
-
-        <div class="container">
-            <div class="wrap">
-
-                <div th:each="journalist : ${journalists}" class="card">
-                    <h2 th:text="${journalist.name}"class="title"></h2>
-                    <h3 th:text="${journalist.lastName}"class="title"></h3>
-                    <div>
+        <nav th:replace="/fragments/navbar :: nav"></nav>
+        <div class="box">
+            <div th:each="journalist : ${journalists}" class="card">
+                <div class="imgBx"></div>
+                <div class="details">
+                    <h2 th:text="${journalist.name}"></h2>
+                    <div sec:authorize="hasRole('ADMIN')">
 
                         <div style="float:left; margin-left: 15px">
                             <a class="btn btn-outline-warning btn-sm"
@@ -65,11 +40,10 @@
                         </div>
                     </div>
                 </div>
-
-                <a class="button" th:href="@{../journalist/create}">Add one</a>
-
             </div>
+            <a th:href="@{../journalist/create}" class="button">
+                CREATE
+            </a>
         </div>
-
     </body>
 </html>

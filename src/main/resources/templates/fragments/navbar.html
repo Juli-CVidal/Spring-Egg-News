@@ -1,0 +1,40 @@
+
+<nav>
+
+    <ul>
+        <li>
+            <a th:href="@{/}">Home</a>
+        </li>
+        <li>
+            <a th:if="${null != session.userSession}" th:href="@{/news}">News</a>
+        </li>
+        <li >
+            <a sec:authorize="hasAnyRole('ADMIN', 'JOURNALIST')"
+               th:href="@{/news/create}">Add a news</a>
+        </li>
+        <li >
+            <a th:if="${null != session.userSession}"
+               th:href="@{/journalist}">Journalists</span></a>
+        </li>
+        <li >
+            <a th:if="${null != session.userSession}"
+               sec:authorize="hasRole('ADMIN')" 
+               th:href="@{/journalist/create}">Register a journalist</a>
+        </li>
+        <li>
+            <a  th:if="${null != session.userSession}"
+                th:href="@{/logout}">Logout</a>
+        </li>
+
+        <li>
+            <a  th:if="${null == session.userSession}" 
+                th:href="@{/sign_in}">Sign in</a>
+        </li>
+        <li>
+            <a  th:if="${null == session.userSession}"
+                th:href="@{/sign_up}">Sign up</a>
+        </li>
+
+    </ul>
+
+</nav>
