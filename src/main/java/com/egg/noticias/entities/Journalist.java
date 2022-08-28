@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,9 +30,11 @@ public class Journalist {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
     private String name;
-    private String lastName;
 
 //    @Column(columnDefinition ="MEDIUMTEXT")
 //    private String photo;
     private boolean deleted;
+    
+    @OneToOne
+    private Image image;
 }

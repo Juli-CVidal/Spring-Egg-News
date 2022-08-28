@@ -45,6 +45,7 @@ body {
     border-radius: 5px;
     overflow: hidden;
     z-index: 0;
+    min-height: 190px;
 }
 .blog-card a {
     color: inherit;
@@ -240,8 +241,13 @@ li div{
 
 }
 
-.photo{
+.defaultPhoto{
     background-image: url("../imgs/news-icon.webp");
+}
+
+.photo{
+    width: 100%;
+    height: 100%;
 }
 
 span{

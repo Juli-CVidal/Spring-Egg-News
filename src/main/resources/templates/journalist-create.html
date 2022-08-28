@@ -19,6 +19,7 @@
                                 name="contactForm"
                                 method="POST"
                                 th:action="@{/journalist/add}"
+                                enctype="multipart/form-data"
                                 autocomplete="off"
                                 novalidate
 
@@ -47,6 +48,16 @@
                                             required
                                             />
                                         <div class="invalid-feedback">Enter a valid lastname</div>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <input
+                                            type="file"
+                                            name="photo"
+                                            class="form-control form-control-sm"
+                                            id="photo"
+                                            accept="image/*"
+                                            required/>
+                                        <div class="invalid-feedback">Select a photo</div>
                                     </div>
                                 </div>
                                 <br>

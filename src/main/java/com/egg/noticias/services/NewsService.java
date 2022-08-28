@@ -27,20 +27,20 @@ public class NewsService {
     @Autowired
     private JournalistRepository journalistRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     @Transactional
     public void createNews(String title, String body,
-            //            MultipartFile photo,
-            String journalistId) throws NewsException {
-        validateData(title, body,
-                //                photo,
-                journalistId);
+            MultipartFile photo, String journalistId) throws NewsException {
+
+        validateData(title, body, photo, journalistId);
 
         News newNews = new News();
         newNews.setTitle(title);
         newNews.setBody(body);
-//        addPhoto(newNews, photo);
         newNews.setReleaseDate(new Date(System.currentTimeMillis()));
-
+        newNews.setImage(imageService.save(photo));
         Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
         newNews.setJournalist(journalist);
 
@@ -64,18 +64,16 @@ public class NewsService {
     }
 
     @Transactional
-    public void modifyNews(String id, String title, String body,
-            //            MultipartFile photo, 
+    public void modifyNews(String id, String title,
+            String body, MultipartFile photo,
             String journalistId) throws NewsException {
-        validateData(title, body,
-                //                photo, 
-                journalistId);
+        validateData(title, body, photo, journalistId);
 
         News news = getNewsById(id);
         news.setTitle(title);
         news.setBody(body);
         news.setReleaseDate(new Date(System.currentTimeMillis()));
-//        addPhoto(news, photo);
+        news.setImage(imageService.save(photo));
         Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
         news.setJournalist(journalist);
 
@@ -98,25 +96,17 @@ public class NewsService {
         return (Journalist) optJournalist.get();
     }
 
-//    private void addPhoto(News news, MultipartFile photo) {
-//        try {
-//            news.setPhoto(Base64.encodeBytes(photo.getBytes()));
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace(System.out);
-//        }
-//    }
     private void validateData(String title, String body,
-            //            MultipartFile photo, 
-            String journalistId) throws NewsException {
+            MultipartFile photo, String journalistId) throws NewsException {
         if (null == title || title.isEmpty()) {
             throw new NewsException("No valid title entered");
         }
         if (null == body || body.isEmpty()) {
             throw new NewsException("No body title entered");
         }
-//        if (null == photo || photo.isEmpty()) {
-//            throw new NewsException("No valid title entered");
-//        }
+        if (null == photo || photo.isEmpty()) {
+            throw new NewsException("No valid title entered");
+        }
         if (null == journalistId || journalistId.isEmpty()) {
             throw new NewsException("No valid journalist id entered");
         }

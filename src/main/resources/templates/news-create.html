@@ -20,6 +20,7 @@
                                 autocomplete="off"
                                 method="POST"
                                 th:action="@{/news/add}"
+                                enctype="multipart/form-data"
                                 novalidate
                                 >
                                 <div class="row">
@@ -42,11 +43,11 @@
 
                                             <option th:each="journalist : ${journalists}"
                                                     th:value="${journalist.id}"
-                                                    th:text="${journalist.lastName}"></option>
+                                                    th:text="${journalist.name}"></option>
                                         </select>
                                         <div class="invalid-feedback">Select a journalist</div>
                                         <br>
-                                            <a class="button" th:href="@{../journalist/create}">Add one</a>
+                                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="button" th:href="@{../journalist/create}">Add one</a>
                                     </div>
 
                                 </div>
@@ -64,6 +65,16 @@
                                             required
                                             ></textarea>
                                         <div class="invalid-feedback">Enter a body</div>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <input
+                                            type="file"
+                                            name="photo"
+                                            class="form-control form-control-sm"
+                                            id="photo"
+                                            accept="image/*"
+                                            required/>
+                                        <div class="invalid-feedback">Select a photo</div>
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">

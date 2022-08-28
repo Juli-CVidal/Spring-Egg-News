@@ -8,8 +8,6 @@ import com.egg.noticias.entities.NewsUser;
 import com.egg.noticias.enums.Roles;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.services.NewsUserService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -81,7 +79,7 @@ public class PortalController {
     public String profile(ModelMap model, HttpSession session) {
         NewsUser user = (NewsUser) session.getAttribute("userSession");
         model.put("user", user);
-        return "user-modify";
+        return "profile-modify";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_JOURNALIST')")
@@ -89,16 +87,16 @@ public class PortalController {
     public String update(MultipartFile photo, @PathVariable String id,
             @RequestParam String name, @RequestParam String email,
             @RequestParam String password, @RequestParam String confirm,
-            ModelMap model) {
-
+            ModelMap model, HttpSession session) {
+            NewsUser user = (NewsUser) session.getAttribute("userSession");
+            
         try {
             userService.update(id, name, email, password, confirm, photo);
-            return "index.html";
+            return user.getRole() == Roles.JOURNALIST ? "journalist-table" : "index";
         } catch (NewsException ne) {
+            model.put("user", user);
             model.put("error", ne.getMessage());
-            model.put("name", name);
-            model.put("email", email);
-            return "user-modify";
+            return "profile-modify";
         }
     }
 

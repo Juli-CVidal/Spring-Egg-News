@@ -4,6 +4,7 @@
 package com.egg.noticias.services;
 
 // @author JulianCVidal
+import com.egg.noticias.entities.Image;
 import com.egg.noticias.entities.Journalist;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.repositories.JournalistRepository;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class JournalistService {
@@ -21,19 +23,37 @@ public class JournalistService {
     @Autowired
     private JournalistRepository repository;
 
+    @Autowired
+    private ImageService imageService;
+
     @Transactional
-    public void createJournalist(String name
-    //            , String photo
+    public void createJournalist(String name, MultipartFile photo
     ) throws NewsException {
-        validateData(name
-        //                , photo
-        );
+        validateData(name, photo);
 
         Journalist newJournalist = new Journalist();
 
         newJournalist.setName(name);
-//        newJournalist.setPhoto(photo);
+        newJournalist.setImage(imageService.save(photo));
 
+        repository.save(newJournalist);
+    }
+
+    @Transactional
+    public void createJournalistFromUser(String id, String name,
+            Image image) throws NewsException {
+        validateId(id);
+        if (null == name || name.isEmpty()) {
+            throw new NewsException("No valid name entered");
+        }
+        if (null == image) {
+            throw new NewsException("No image entered");
+        }
+
+        Journalist newJournalist = new Journalist();
+        newJournalist.setId(id);
+        newJournalist.setName(name);
+        newJournalist.setImage(image);
         repository.save(newJournalist);
     }
 
@@ -53,16 +73,30 @@ public class JournalistService {
     }
 
     @Transactional
-    public void modifyJournalist(String id, String name
-    //            , String photo
-    ) throws NewsException {
-        validateData(name
-        //                , photo
-        );
+    public void modifyJournalist(String id, String name, MultipartFile photo) throws NewsException {
+        validateId(id);
+        validateData(name, photo);
 
         Journalist journalist = getJournalistById(id);
         journalist.setName(name);
-//        journalist.setPhoto(photo);
+        journalist.setImage(imageService.save(photo));
+
+        repository.save(journalist);
+    }
+
+    @Transactional
+    public void modifyJournalistFromUser(String id, String name, Image image) throws NewsException {
+        validateId(id);
+        if (null == name || name.isEmpty()) {
+            throw new NewsException("No valid name entered");
+        }
+        if (null == image || image.getId().isEmpty()) {
+            throw new NewsException("No valid image entered");
+        }
+
+        Journalist journalist = getJournalistById(id);
+        journalist.setName(name);
+        journalist.setImage(image);
 
         repository.save(journalist);
     }
@@ -75,15 +109,13 @@ public class JournalistService {
         repository.save(journalist);
     }
 
-    private void validateData(String name
-    //            , String photo
-    ) throws NewsException {
+    private void validateData(String name, MultipartFile image) throws NewsException {
         if (null == name || name.isEmpty()) {
             throw new NewsException("No valid name entered");
         }
-//        if (null == photo || photo.isEmpty()) {
-//            throw new NewsException("No valid photo entered");
-//        }
+        if (null == image || image.isEmpty()) {
+            throw new NewsException("No valid image entered");
+        }
     }
 
     private void validateId(String id) throws NewsException {

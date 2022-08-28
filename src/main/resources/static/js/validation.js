@@ -1,7 +1,9 @@
 let form;
 
+
 const addValidation = () => {
   form.addEventListener("submit", (event) => {
+
     if (!form.checkValidity()) {
       event.preventDefault();
       event.stopPropagation();

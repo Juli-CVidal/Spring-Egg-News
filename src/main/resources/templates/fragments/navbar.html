@@ -23,6 +23,10 @@
         </li>
         <li>
             <a  th:if="${null != session.userSession}"
+                th:href="@{/profile}">Profile</a>
+        </li>
+        <li>
+            <a  th:if="${null != session.userSession}"
                 th:href="@{/logout}">Logout</a>
         </li>
 

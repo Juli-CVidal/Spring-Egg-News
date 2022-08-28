@@ -45,49 +45,66 @@ public class NewsUserService implements UserDetailsService {
             String password, String confirm,
             Roles role, MultipartFile photo) throws NewsException {
 
-        validate(name, email, password, confirm, photo);
+        validate(name, email, confirm, photo);
+        if (!password.equals(confirm)) {
+            throw new NewsException("Both passwords must be the same");
+        }
 
         NewsUser user = new NewsUser();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setRole(null == role ? Roles.USER : role);
-        user.setImage(imageService.save(photo));
-        
-        if (role == Roles.JOURNALIST) {
-            journalistService.createJournalist(name);
-        }
-        
-        repository.save(user);
-    }
-    
-    
-    @Transactional
-    public void update(String id, String name,
-            String email, String password,
-            String confirm, MultipartFile photo) throws NewsException{
-        validate(name, email, password, confirm, photo);
-        if (null == id || id.isEmpty()){
-            throw new NewsException("No id entered");
-        }
-        NewsUser user = getUser(id);
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
-        
-        Image image = imageService.update(photo, user.getImage() != null ? user.getImage().getId() : null);
+        Image image = imageService.save(photo);
         user.setImage(image);
+
+        if (role == Roles.JOURNALIST) {
+            journalistService.createJournalistFromUser(user.getId(), name, image);
+        }
+
         repository.save(user);
     }
 
-    private NewsUser getUser(String id) throws NewsException{
+    @Transactional
+    public void update(String id, String name,
+            String email, String password,
+            String confirm, MultipartFile newImage) throws NewsException {
+        validate(name, email, confirm, newImage);
+
+        if (!new BCryptPasswordEncoder().matches(confirm, password)) {
+            throw new NewsException("Incorrect password, retry");
+        }
+
+        if (null == id || id.isEmpty()) {
+            throw new NewsException("No id entered");
+        }
+
+        NewsUser user = getUser(id);
+        user.setName(name);
+        user.setEmail(email);
+        Image oldImage = user.getImage();
+        if (null == oldImage || null == oldImage.getId()){
+            user.setImage(imageService.save(newImage));
+        }else{
+            user.setImage(imageService.update(newImage,oldImage.getId()));
+        }
+
+        if (user.getRole() == Roles.JOURNALIST) {
+            journalistService.modifyJournalistFromUser(id, name, user.getImage());
+        }
+        
+        repository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    private NewsUser getUser(String id) throws NewsException {
         Optional<NewsUser> user = repository.findById(id);
-        if (!user.isPresent()){
+        if (!user.isPresent()) {
             throw new NewsException("No user found");
         }
         return user.get();
     }
-    
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (null == email || email.isEmpty()) {
@@ -109,10 +126,8 @@ public class NewsUserService implements UserDetailsService {
         return new User(newsUser.getEmail(), newsUser.getPassword(), permissions);
     }
 
-    
-    private void validate(String name, String email, 
-            String password, String confirm,
-            MultipartFile photo) throws NewsException {
+    private void validate(String name, String email,
+            String password, MultipartFile photo) throws NewsException {
         if (null == name || name.isEmpty()) {
             throw new NewsException("No valid name entered");
         }
@@ -122,14 +137,10 @@ public class NewsUserService implements UserDetailsService {
         }
 
         if (null == password || password.isEmpty() || 8 > password.length()) {
-            throw new NewsException("No valid password entered");
+            throw new NewsException("No valid password entered, try again");
         }
 
-        if (!password.equals(confirm)) {
-            throw new NewsException("Both passwords must be the same");
-        }
-        
-        if (null == photo || photo.isEmpty()){
+        if (null == photo || photo.isEmpty()) {
             throw new NewsException("No valid image entered");
         }
     }

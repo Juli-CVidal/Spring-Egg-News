@@ -9,10 +9,9 @@ import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.repositories.ImageRepository;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -21,9 +20,10 @@ public class ImageService {
     @Autowired
     private ImageRepository repository;
 
+    @Transactional
     public Image save(MultipartFile file) throws NewsException {
         validate(file);
-
+        System.out.println("guardando la foto");
         try {
             Image image = new Image();
             image.setContent(file.getBytes());
@@ -37,7 +37,9 @@ public class ImageService {
         }
     }
 
+    @Transactional
     public Image update(MultipartFile file, String id) throws NewsException {
+        System.out.println("intentando hacer update a la foto");
         validate(file);
 
         try {
@@ -59,7 +61,8 @@ public class ImageService {
         }
     }
 
-    private Image getImage(String id) throws NewsException {
+    @Transactional(readOnly = true)
+    public Image getImage(String id) throws NewsException {
         if (null == id || id.isEmpty()) {
             throw new NewsException("No valid id entered");
         }

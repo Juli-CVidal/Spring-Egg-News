@@ -7,25 +7,30 @@
 
     <body>
         <nav th:replace="/fragments/navbar :: nav"></nav>
-
+        <div th:if="${error}!=null" class="card text-white bg-danger mb-3 mensajeError" >
+            <div class="card-body">
+                <h5 class="card-title">Error!! :c</h5>
+                <p class="card-text" th:text="${error}"></p>
+            </div>
+        </div>
         <div class="content">
             <div class="container">
                 <div class="row align-items-stretch justify-content-center no-gutters">
                     <div class="col-md-7">
                         <div class="form h-100 contact-wrap p-5">
-                            <h3 class="text-center">Modifying a Journalist</h3>
+                            <h3 class="text-center">Modifying your profile</h3>
                             <form
                                 class="mb-5 needs-validation"
                                 id="contactForm"
                                 name="contactForm"
                                 method="POST"
-                                th:action="@{/journalist/modify/__${journalist.id}__}"
+                                th:action="@{/profile/__${user.id}__}"
                                 autocomplete="off"
                                 enctype="multipart/form-data"
                                 novalidate
                                 >
                                 <div class="row">
-                                    <input type='text' hidden name="id" th:value="${journalist.id}"/>
+                                    <input type='text' hidden name="id" th:value="${user.id}"/>
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="name" class="col-form-label">Name *</label>
                                         <input
@@ -33,10 +38,35 @@
                                             class="form-control"
                                             name="name"
                                             id="name"
-                                            th:placeholder="|Actual name: ${name != null? name : journalist.name}|"
+                                            th:placeholder="|Actual name: ${user.name}|"
                                             required
                                             />
                                         <div class="invalid-feedback">Enter a valid name</div>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="email" class="col-form-label">Email *</label>
+                                        <input
+                                            type="email"
+                                            class="form-control"
+                                            name="email"
+                                            id="email"
+                                            th:placeholder="|Actual email: ${user.email}|"
+                                            required
+                                            />
+                                        <div class="invalid-feedback">Enter a valid email</div>
+                                    </div>
+                                    <input type='password' hidden name="password" id="password" th:value="${user.password}"/>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="confirm" class="col-form-label">Confirm password *</label>
+                                        <input
+                                            type="password"
+                                            class="form-control"
+                                            name="confirm"
+                                            id="confirm"
+                                            placeholder="Enter your password *"
+                                            required
+                                            />
+                                        <div class="invalid-feedback">Confirm password</div>
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
                                         <input
@@ -45,6 +75,7 @@
                                             class="form-control form-control-sm"
                                             id="photo"
                                             accept="image/*"
+                                  
                                             required/>
                                         <div class="invalid-feedback">Select a photo</div>
                                     </div>

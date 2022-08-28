@@ -3,14 +3,14 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head th:replace="/fragments/head ::head"></head>
+    <head th:replace="/fragments/formsHead ::head"></head>
     <body>
         <nav th:replace="/fragments/navbar :: nav"></nav>
 
         <div class="content">
-            <div class="container">
+            <div class="container-xl">
                 <div class="row align-items-stretch justify-content-center no-gutters">
-                    <div class="col-md-7">
+                    <div class="col-lg-7">
                         <div class="form h-100 contact-wrap p-5">
                             <h3 class="text-center">Modifying a new!</h3>
                             <form
@@ -20,6 +20,7 @@
                                 autocomplete="off"
                                 method="POST"
                                 th:action="@{/news/modify/__${news.id}__}"
+                                enctype="multipart/form-data"
                                 novalidate
                                 >
                                 <input hidden type="text" th:value="${news.id}" name="id"/>
@@ -31,25 +32,24 @@
                                             class="form-control"
                                             name="title"
                                             id="title"
-                                            placeholder="Title of the news"
+                                            th:placeholder="|Current title: ${news.title}|"
                                             required
                                             />
                                         <div class="invalid-feedback">Enter a valid title</div>
                                     </div>
-                                    <div class="col-md-4 form-group mb-3">
+                                    <div class="col-md-6 form-group mb-3">
                                         <label for="journalistId" class="col-form-label">Select a Journalist</label>
                                         <select name="journalistId" class="form-control" required>
                                             <option value="" disabled selected hidden>Click me</option>
 
                                             <option th:each="journalist : ${journalists}"
                                                     th:value="${journalist.id}"
-                                                    th:text="${journalist.lastName}"></option>
+                                                    th:text="${journalist.name}"></option>
                                         </select>
                                         <div class="invalid-feedback">Select a journalist</div>
+                                        <a class="button" th:href="@{/journalist/create}">Add one</a>
                                     </div>
-                                    <div class="col-md-2 form-group mb-3">
-                                        <a class="btn btn-block btn-primary rounded-0 py-2 px-4" th:href="@{../journalist/create}">Add one</a>
-                                    </div>
+                               
                                 </div>
 
                                 <div class="row mb-5">
@@ -61,10 +61,20 @@
                                             id="body"
                                             cols="30"
                                             rows="4"
-                                            placeholder="Describe the news"
+                                            th:placeholder="${news.body}"
                                             required
                                             ></textarea>
                                         <div class="invalid-feedback">Enter a body</div>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <input
+                                            type="file"
+                                            name="photo"
+                                            class="form-control form-control-sm"
+                                            id="photo"
+                                            accept="image/*"
+                                            required/>
+                                        <div class="invalid-feedback">Select a photo</div>
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,7 +34,7 @@ public class News {
     private String id;
 
     private String title;
-    
+
     @Column(columnDefinition = "TEXT")
     private String body;
 
@@ -47,4 +48,6 @@ public class News {
 
     private boolean deleted;
 
+    @OneToOne
+    private Image image;
 }

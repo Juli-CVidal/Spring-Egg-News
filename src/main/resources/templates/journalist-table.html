@@ -14,15 +14,16 @@
             rel="stylesheet"
             />
 
-        <link rel="stylesheet" th:href="@{../css/journalist.css}" type="text/css"/>
         <link rel='stylesheet' th:href="@{../css/navbar.css}"/>
+        <link rel="stylesheet" th:href="@{../css/journalist.css}" type="text/css"/>
     </head>
 
     <body>
         <nav th:replace="/fragments/navbar :: nav"></nav>
         <div class="box">
             <div th:each="journalist : ${journalists}" class="card">
-                <div class="imgBx"></div>
+                <div class="imgBx" th:if="${journalist.image != null}" th:style="'background: url(' + @{/image/image/__${journalist.image.id}__} + '); background-size:cover'"></div>
+                <div th:if="${journalist.image == null}" class="imgBx defaultPhoto"></div>
                 <div class="details">
                     <h2 th:text="${journalist.name}"></h2>
                     <div sec:authorize="hasRole('ADMIN')">
@@ -41,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <a th:href="@{../journalist/create}" class="button">
+            <a sec:authorize="hasRole('ROLE_ADMIN')"th:href="@{../journalist/create}" class="button">
                 CREATE
             </a>
         </div>

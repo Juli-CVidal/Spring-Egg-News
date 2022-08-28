@@ -21,36 +21,36 @@
         <nav th:replace="/fragments/navbar :: nav"></nav>
         <div th:each="news : ${newsList}" class="blog-card">
             <div class="meta">
-                <div class="photo"></div>
-                <ul class="details">
-                    <li class="author">
-                        <span>&#128100</span>
-                        <span th:text="${news.journalist.lastName}"></span>
-                        , 
-                        <span th:text="${news.journalist.name}"></span>
-                    </li>
-                    <li class="date">
-                        <span>&#128197</span>
-                        <span th:text="${news.releaseDate.getDate()}"></span>
-                        /
-                        <span th:text="${news.releaseDate.getMonth()}"></span>
-                    </li>
-                    <li sec:authorize="hasRole('ADMIN')">
-                        <div style="float: left">
-                            <a class="btn btn-outline-warning btn-sm"
-                               th:href="@{../news/modify/__${news.id}__}">
-                                Modify
-                            </a>
-                        </div>
-                        <div style="float: right; margin-right: 10px">
 
-                            <form th:action="@{../news/delete/__${news.id}__}" method="POST">
-                                <button class="btn btn-outline-danger btn-sm">Delete</button>
-                            </form>
-                        </div>
+                <img  th:if="${news.image != null}" class="photo" th:src="@{/image/image/__${news.image.id}__}"></img>
+                    
+                <div th:if="${news.image == null}" class="photo defaultPhoto"></div>
+                    <ul class="details">
+                        <li class="author">
+                            <span>&#128100;</span><span th:text="${news.journalist.name}"></span>
+                        </li>
+                        <li class="date">
+                            <span>&#128197;</span>
+                            <span th:text="${news.releaseDate.getDate()}"></span>
+                            /
+                            <span th:text="${news.releaseDate.getMonth()}"></span>
+                        </li>
+                        <li sec:authorize="hasRole('ADMIN')">
+                            <div style="float: left">
+                                <a class="btn btn-outline-warning btn-sm"
+                                   th:href="@{../news/modify/__${news.id}__}">
+                                    Modify
+                                </a>
+                            </div>
+                            <div style="float: right; margin-right: 10px">
 
-                    </li>
-                </ul>
+                                <form th:action="@{../news/delete/__${news.id}__}" method="POST">
+                                    <button class="btn btn-outline-danger btn-sm">Delete</button>
+                                </form>
+                            </div>
+
+                        </li>
+                    </ul>
             </div>
             <div class="description">
                 <h1 th:text="${news.title}"></h1>

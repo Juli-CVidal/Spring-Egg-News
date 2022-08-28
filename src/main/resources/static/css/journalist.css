@@ -57,35 +57,12 @@ body {
     left: 10px;
     bottom: 10px;
     right: 10px;
-    background: #222;
     transition: 0.5s;
     z-index: 1;
 }
 
-.card:hover .imgBx {
-    bottom: 90px;
-}
 
 
-.card:nth-child(4n) .imgBx{
-    background: url("../imgs/female-avatar-2.png");
-}
-.card:nth-child(4n+1) .imgBx{
-    background: url("../imgs/male-avatar-1.png");
-}
-.card:nth-child(4n+2) .imgBx{
-    background: url("../imgs/female-avatar-1.png");
-}
-.card:nth-child(4n+3) .imgBx{
-    background: url("../imgs/male-avatar-2.png");
-}
-
-.card:nth-child(n) .imgBx{
-    background-size: cover;
-    background-repeat: no-repeat;
-    left:15px;
-
-}
 
 .card .details {
     position: absolute;
@@ -145,4 +122,32 @@ body {
 
 .btn{
     transform: translateY(-20px);
+}
+
+
+
+
+
+.card:nth-child(4n) .defaultPhoto{
+    background: url("../imgs/female-avatar-2.png");
+}
+.card:nth-child(4n+1) .defaultPhoto{
+    background: url("../imgs/male-avatar-1.png");
+}
+.card:nth-child(4n+2) .defaultPhoto{
+    background: url("../imgs/female-avatar-1.png");
+}
+.card:nth-child(4n+3) .defaultPhoto{
+    background: url("../imgs/male-avatar-2.png");
+}
+
+
+.card:nth-child(n) .imgBx{
+    background-repeat: no-repeat;
+    background-size: cover;
+    left:12px;
+}
+
+.card:hover .imgBx{
+    bottom: 90px;
 }
