@@ -15,4 +15,7 @@ public interface NewsUserRepository extends JpaRepository<NewsUser, String> {
 
     @Query("SELECT n FROM NewsUser n WHERE n.email = :email")
     public NewsUser getUserByEmail(@Param("email") String email);
+    
+    @Query("SELECT n FROM NewsUser n WHERE n.id = :id")
+    public NewsUser getUserById(@Param("id") String id);
 }

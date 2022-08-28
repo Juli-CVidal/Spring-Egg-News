@@ -8,7 +8,7 @@ package com.egg.noticias.enums;
 
 
 public enum Roles {
-    ADMIN,
+    USER,
     JOURNALIST,
-    USER;
+    ADMIN;
 }

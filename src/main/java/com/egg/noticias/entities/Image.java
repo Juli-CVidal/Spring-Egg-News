@@ -4,15 +4,12 @@
 package com.egg.noticias.entities;
 
 // @author JulianCVidal
-import java.util.Date;
-import javax.persistence.Column;
+import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,27 +21,19 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "news")
-public class News {
+public class Image {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    private String title;
-    
-    @Column(columnDefinition = "TEXT")
-    private String body;
+    private String mime;
 
-//    @Column(columnDefinition ="MEDIUMTEXT")
-//    private String photo;
-    @Temporal(TemporalType.DATE)
-    private Date releaseDate;
+    private String name;
 
-    @ManyToOne
-    private Journalist journalist;
-
-    private boolean deleted;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] content;
 
 }

@@ -8,15 +8,19 @@ import com.egg.noticias.entities.NewsUser;
 import com.egg.noticias.enums.Roles;
 import com.egg.noticias.exceptions.NewsException;
 import com.egg.noticias.services.NewsUserService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/")
@@ -49,10 +53,11 @@ public class PortalController {
             @RequestParam String password,
             String confirm,
             @RequestParam Roles role,
+            @RequestParam(required = false) MultipartFile photo,
             ModelMap model) {
 
         try {
-            userService.signup(name, email, password, confirm, role);
+            userService.signup(name, email, password, confirm, role, photo);
             model.put("action", "sign_in");
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());
@@ -64,12 +69,37 @@ public class PortalController {
         }
         return "logs.html";
     }
-    
 
     @GetMapping("/")
-    public String index( //            @RequestParam(required = false) String logged, ModelMap model
-            HttpSession session) {
+    public String index(HttpSession session) {
         NewsUser user = (NewsUser) session.getAttribute("userSession");
         return "index.html";
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_JOURNALIST')")
+    @GetMapping("/profile")
+    public String profile(ModelMap model, HttpSession session) {
+        NewsUser user = (NewsUser) session.getAttribute("userSession");
+        model.put("user", user);
+        return "user-modify";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_JOURNALIST')")
+    @PostMapping("/profile/{id}")
+    public String update(MultipartFile photo, @PathVariable String id,
+            @RequestParam String name, @RequestParam String email,
+            @RequestParam String password, @RequestParam String confirm,
+            ModelMap model) {
+
+        try {
+            userService.update(id, name, email, password, confirm, photo);
+            return "index.html";
+        } catch (NewsException ne) {
+            model.put("error", ne.getMessage());
+            model.put("name", name);
+            model.put("email", email);
+            return "user-modify";
+        }
+    }
+
 }

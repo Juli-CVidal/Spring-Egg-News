@@ -13,8 +13,8 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
             /> 
-        <link rel="stylesheet" th:href="@{/css/logs.css}"/>
         <link rel='stylesheet' th:href="@{/css/navbar.css}"/>
+        <link rel="stylesheet" th:href="@{/css/logs.css}"/>
 
 
     </head>
@@ -31,6 +31,7 @@
                     method="POST"
                     th:action="@{/signup}"
                     autocomplete="off"
+                    enctype="multipart/form-data"
                     novalidate>
                     <h1>Create Account</h1>
                     <div class="form-group">
@@ -73,7 +74,6 @@
                     </div>
                     <div>
                         <select name="role" required>
-                            <option value="" disabled selected hidden>Select a role</option>
                             <option th:each="role: ${roles}"
                                     th:value="${role}"
                                     th:text="${role.toString()}">
@@ -81,6 +81,15 @@
 
                         </select>
                         <div class="invalid-feedback">Select a role</div>
+                    </div>
+                    <div>
+                            <input
+                                type="file"
+                                name="photo"
+                                id="photo"
+                                accept="image/*"
+                                required/>
+                        <div class="invalid-feedback">Select a photo</div>
                     </div>
                     <div>
                         <button type="submit">Sign Up</button>
