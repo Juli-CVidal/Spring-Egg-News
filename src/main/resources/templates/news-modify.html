@@ -19,12 +19,12 @@
                                 name="contactForm"
                                 autocomplete="off"
                                 method="POST"
-                                th:action="@{/news/modify/__${news.title}__}"
+                                th:action="@{/news/modify/__${news.id}__}"
                                 enctype="multipart/form-data"
                                 novalidate
                                 >
                                 <input hidden type="text" name="id" th:value="${news.id}"/>
-                                <input hidden type="text" name="journalistName" th:value="${news.journalist.name}"/>
+                                <input hidden type="text" name="journalistName" th:value="${news.creator.name}"/>
                                 <div class="row">
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="title" class="col-form-label">Title *</label>
