@@ -7,6 +7,12 @@
 
     <body>
         <nav th:replace="/fragments/navbar :: nav"></nav>
+        <div th:if="${error}!=null" class="card text-white bg-danger mb-3 mensajeError" >
+            <div class="card-body">
+                <h5 class="card-title">Error!! :c</h5>
+                <p class="card-text" th:text="${error}"></p>
+            </div>
+        </div>
         <div class="content">
             <div class="container">
                 <div class="row align-items-stretch justify-content-center no-gutters">
@@ -23,6 +29,7 @@
                                 enctype="multipart/form-data"
                                 novalidate
                                 >
+                                <input hidden type="text" name="journalistId" id="journalistId" th:value="${journalistId}"/>
                                 <div class="row">
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="title" class="col-form-label">Title *</label>
@@ -37,21 +44,17 @@
                                         <div class="invalid-feedback">Enter a valid title</div>
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
-                                        <label for="journalistId" class="col-form-label"></label>
-                                        <select name="journalistId" required>
-                                            <option value="" disabled selected hidden>Select a Journalist</option>
-
-                                            <option th:each="journalist : ${journalists}"
-                                                    th:value="${journalist.id}"
-                                                    th:text="${journalist.name}"></option>
-                                        </select>
-                                        <div class="invalid-feedback">Select a journalist</div>
-                                        <br>
-                                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="button" th:href="@{../journalist/create}">Add one</a>
+                                        <label for="image" class="col-form-label">Image *</label>
+                                        <input
+                                            type="file"
+                                            name="image"
+                                            class="form-control form-control-sm"
+                                            id="image"
+                                            accept="image/*"
+                                            required/>
+                                        <div class="invalid-feedback">Select a photo</div>
                                     </div>
-
                                 </div>
-
                                 <div class="row mb-5">
                                     <div class="col-md-12 form-group mb-3">
                                         <label for="body" class="col-form-label">Body *</label>
@@ -65,16 +68,6 @@
                                             required
                                             ></textarea>
                                         <div class="invalid-feedback">Enter a body</div>
-                                    </div>
-                                    <div class="col-md-6 form-group mb-3">
-                                        <input
-                                            type="file"
-                                            name="photo"
-                                            class="form-control form-control-sm"
-                                            id="photo"
-                                            accept="image/*"
-                                            required/>
-                                        <div class="invalid-feedback">Select a photo</div>
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">

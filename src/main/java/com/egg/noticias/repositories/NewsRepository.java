@@ -17,12 +17,8 @@ public interface NewsRepository extends JpaRepository<News, String> {
     @Query("SELECT n FROM News n WHERE n.deleted = false")
     List<News> getAllNews();
 
-    @Query("SELECT n FROM News n WHERE n.id = :id")
-    News searchById(@Param("id") String id);
-    
+    //Title is unique
     @Query("SELECT n FROM News n WHERE n.title = :title")
     News searchByTitle(@Param("title") String title);
-
-    @Query("SELECT n FROM News n WHERE n.journalist.name = :name")
-    List<News> searchByJournalist(@Param("name") String name);
+    
 }

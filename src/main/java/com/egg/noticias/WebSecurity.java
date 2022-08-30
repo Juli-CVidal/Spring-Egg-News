@@ -4,7 +4,7 @@
 package com.egg.noticias;
 
 // @author JulianCVidal
-import com.egg.noticias.services.NewsUserService;
+import com.egg.noticias.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,18 +20,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private NewsUserService userService;
+    private AccountService accountService;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-                .passwordEncoder(new BCryptPasswordEncoder());
-    }
+   @Autowired
+   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+       auth.userDetailsService(accountService).passwordEncoder(new BCryptPasswordEncoder());
+   }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin/*").hasRole("ADMIN")
                 .antMatchers("/news/*").hasAnyRole("ADMIN", "JOURNALIST")
                 .antMatchers("/journalist/*").hasAnyRole("ADMIN","JOURNALIST")
                 .antMatchers("/css/*", "/js/*", "/imgs/*", "/**")
@@ -39,7 +37,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                     .loginPage("/sign_in")
                     .loginProcessingUrl("/signin")
-                    .usernameParameter("email")
+                    .usernameParameter("username")
                     .passwordParameter("password")
                     .defaultSuccessUrl("/")
                     .permitAll()

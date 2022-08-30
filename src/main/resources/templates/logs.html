@@ -39,19 +39,9 @@
                             type="text"
                             name="name"
                             id="name"
-                            placeholder="Name"
-                            th:value="${name}"
+                            placeholder="Name *"
                             required/>
                         <div class="invalid-feedback">Enter a valid name</div>
-                    </div>
-                    <div>
-                        <input
-                            type="email"
-                            name="email"
-                            id="signUpEmail"
-                            placeholder="Email"
-                            required/>
-                        <div class="invalid-feedback">Enter a valid email</div>
                     </div>
                     <div class="password-container">
                         <input 
@@ -115,13 +105,13 @@
 
                     <div>
                         <input
-                            type="email" 
-                            name="email"
-                            id="signInEmail"
-                            placeholder="Email" 
-                            th:value="${email}"
+                            type="text" 
+                            name="username"
+                            id="name"
+                            placeholder="Name *" 
+                            th:value="${name}"
                             required/>
-                        <div class="invalid-feedback">Enter a valid email</div>
+                        <div class="invalid-feedback">Enter a valid name</div>
                     </div>
                     <div class="password-container">
                         <input 
@@ -144,12 +134,12 @@
                 <div class="overlay">
                     <div class="overlay-panel overlay-left">
                         <h1>Welcome Back!</h1>
-                        <p>To keep connected with us please login with your personal details</p>
+                        <p>To keep connected with us please login with your personal details!</p>
                         <button class="ghost" id="signInBtn">Sign In</button>
                     </div>
                     <div class="overlay-panel overlay-right">
                         <h1>Hi There!</h1>
-                        <p>Enter your personal details to open an account with us</p>
+                        <p>Enter your personal details to open an account!</p>
                         <button class="ghost" id="signUpBtn">Sign Up</button>
                     </div>
                 </div>

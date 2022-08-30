@@ -4,10 +4,10 @@
 package com.egg.noticias.services;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.Journalist;
+import com.egg.noticias.entities.Account;
 import com.egg.noticias.entities.News;
+import com.egg.noticias.enums.Roles;
 import com.egg.noticias.exceptions.NewsException;
-import com.egg.noticias.repositories.JournalistRepository;
 import com.egg.noticias.repositories.NewsRepository;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +25,7 @@ public class NewsService {
     private NewsRepository newsRepository;
 
     @Autowired
-    private JournalistRepository journalistRepository;
+    private AccountService accountService;
 
     @Autowired
     private ImageService imageService;
@@ -34,17 +34,28 @@ public class NewsService {
     public void createNews(String title, String body,
             MultipartFile photo, String journalistId) throws NewsException {
 
-        validateData(title, body, photo, journalistId);
-
+        validateData(title, body, photo);
+        if (null == journalistId || journalistId.isEmpty()) {
+            throw new NewsException("No valid journalist id entered");
+        }
         News newNews = new News();
         newNews.setTitle(title);
         newNews.setBody(body);
         newNews.setReleaseDate(new Date(System.currentTimeMillis()));
         newNews.setImage(imageService.save(photo));
-        Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
-        newNews.setJournalist(journalist);
-
+        setCreator(newNews, journalistId);
         newsRepository.save(newNews);
+    }
+
+    private void setCreator(News news, String journalistId) throws NewsException {
+        Account journalist = accountService.getUserById(journalistId);
+        if (null == journalist) {
+            throw new NewsException("No account found");
+        }
+        if (journalist.getAccountType() == Roles.USER) {
+            throw new NewsException("The account belongs to a user, it cannot publish news");
+        }
+        news.setCreator(journalist);
     }
 
     @Transactional(readOnly = true)
@@ -65,39 +76,28 @@ public class NewsService {
 
     @Transactional
     public void modifyNews(String id, String title,
-            String body, MultipartFile photo,
-            String journalistId) throws NewsException {
-        validateData(title, body, photo, journalistId);
+            String body, MultipartFile photo) throws NewsException {
+        validateData(title, body, photo);
 
         News news = getNewsById(id);
         news.setTitle(title);
         news.setBody(body);
         news.setReleaseDate(new Date(System.currentTimeMillis()));
         news.setImage(imageService.save(photo));
-        Journalist journalist = getFromOptional(journalistRepository.findById(journalistId));
-        news.setJournalist(journalist);
-
         newsRepository.save(news);
 
     }
 
     @Transactional
+    //Soft delete
     public void deleteNews(String id) throws NewsException {
         News news = getNewsById(id);
         news.setDeleted(true);
-
         newsRepository.save(news);
     }
 
-    private Journalist getFromOptional(Optional optJournalist) throws NewsException {
-        if (!optJournalist.isPresent()) {
-            throw new NewsException("No journalist found");
-        }
-        return (Journalist) optJournalist.get();
-    }
-
     private void validateData(String title, String body,
-            MultipartFile photo, String journalistId) throws NewsException {
+            MultipartFile photo) throws NewsException {
         if (null == title || title.isEmpty()) {
             throw new NewsException("No valid title entered");
         }
@@ -106,9 +106,6 @@ public class NewsService {
         }
         if (null == photo || photo.isEmpty()) {
             throw new NewsException("No valid title entered");
-        }
-        if (null == journalistId || journalistId.isEmpty()) {
-            throw new NewsException("No valid journalist id entered");
         }
     }
 

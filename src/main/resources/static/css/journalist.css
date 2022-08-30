@@ -120,13 +120,6 @@ body {
     outline: none;
 }
 
-.btn{
-    transform: translateY(-20px);
-}
-
-
-
-
 
 .card:nth-child(4n) .defaultPhoto{
     background: url("../imgs/female-avatar-2.png");

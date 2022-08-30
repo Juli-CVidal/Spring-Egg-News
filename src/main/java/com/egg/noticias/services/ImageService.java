@@ -23,7 +23,6 @@ public class ImageService {
     @Transactional
     public Image save(MultipartFile file) throws NewsException {
         validate(file);
-        System.out.println("guardando la foto");
         try {
             Image image = new Image();
             image.setContent(file.getBytes());
@@ -39,7 +38,6 @@ public class ImageService {
 
     @Transactional
     public Image update(MultipartFile file, String id) throws NewsException {
-        System.out.println("intentando hacer update a la foto");
         validate(file);
 
         try {

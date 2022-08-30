@@ -43,18 +43,6 @@
                                             />
                                         <div class="invalid-feedback">Enter a valid name</div>
                                     </div>
-                                    <div class="col-md-6 form-group mb-3">
-                                        <label for="email" class="col-form-label">Email *</label>
-                                        <input
-                                            type="email"
-                                            class="form-control"
-                                            name="email"
-                                            id="email"
-                                            th:placeholder="|Actual email: ${user.email}|"
-                                            required
-                                            />
-                                        <div class="invalid-feedback">Enter a valid email</div>
-                                    </div>
                                     <input type='password' hidden name="password" id="password" th:value="${user.password}"/>
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="confirm" class="col-form-label">Confirm password *</label>

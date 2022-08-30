@@ -16,11 +16,6 @@
             <a th:if="${null != session.userSession}"
                th:href="@{/journalist}">Journalists</span></a>
         </li>
-        <li >
-            <a th:if="${null != session.userSession}"
-               sec:authorize="hasRole('ADMIN')" 
-               th:href="@{/journalist/create}">Register a journalist</a>
-        </li>
         <li>
             <a  th:if="${null != session.userSession}"
                 th:href="@{/profile}">Profile</a>

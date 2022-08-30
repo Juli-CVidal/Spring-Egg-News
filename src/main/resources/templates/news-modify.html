@@ -19,11 +19,12 @@
                                 name="contactForm"
                                 autocomplete="off"
                                 method="POST"
-                                th:action="@{/news/modify/__${news.id}__}"
+                                th:action="@{/news/modify/__${news.title}__}"
                                 enctype="multipart/form-data"
                                 novalidate
                                 >
-                                <input hidden type="text" th:value="${news.id}" name="id"/>
+                                <input hidden type="text" name="id" th:value="${news.id}"/>
+                                <input hidden type="text" name="journalistName" th:value="${news.journalist.name}"/>
                                 <div class="row">
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="title" class="col-form-label">Title *</label>
@@ -37,19 +38,6 @@
                                             />
                                         <div class="invalid-feedback">Enter a valid title</div>
                                     </div>
-                                    <div class="col-md-6 form-group mb-3">
-                                        <label for="journalistId" class="col-form-label">Select a Journalist</label>
-                                        <select name="journalistId" class="form-control" required>
-                                            <option value="" disabled selected hidden>Click me</option>
-
-                                            <option th:each="journalist : ${journalists}"
-                                                    th:value="${journalist.id}"
-                                                    th:text="${journalist.name}"></option>
-                                        </select>
-                                        <div class="invalid-feedback">Select a journalist</div>
-                                        <a class="button" th:href="@{/journalist/create}">Add one</a>
-                                    </div>
-                               
                                 </div>
 
                                 <div class="row mb-5">

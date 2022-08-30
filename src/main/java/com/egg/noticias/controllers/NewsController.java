@@ -4,13 +4,11 @@
 package com.egg.noticias.controllers;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.Journalist;
 import com.egg.noticias.entities.News;
-import com.egg.noticias.entities.NewsUser;
+import com.egg.noticias.entities.Account;
 import com.egg.noticias.exceptions.NewsException;
-import com.egg.noticias.services.JournalistService;
+import com.egg.noticias.services.AccountService;
 import com.egg.noticias.services.NewsService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +30,12 @@ public class NewsController {
     private NewsService newsService;
 
     @Autowired
-    private JournalistService journalistService;
+    private AccountService accountService;
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_JOURNALIST')")
     @GetMapping
-    public String showNews(ModelMap model) {
+    public String showNews(ModelMap model, HttpSession session) {
+        Account user = (Account) session.getAttribute("userSession");
         List<News> newsList = newsService.getAllNews();
         model.put("newsList", newsList);
         return "news-table";
@@ -45,48 +44,38 @@ public class NewsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_JOURNALIST')")
     @GetMapping("/create")
     public String getForm(HttpSession session, ModelMap model) {
-        NewsUser user = (NewsUser) session.getAttribute("userSession");
-        List<Journalist> journalists = new ArrayList();
-        try {
-            journalists.add(journalistService.getJournalistById(user.getId()));
-        } catch (NewsException ne) {
-            journalists = journalistService.getAllJournalists();
-            System.err.println(ne.getMessage());
-        } finally {
-            model.addAttribute("journalists", (List) journalists);
-            return "news-create";
-        }
+        Account user = (Account) session.getAttribute("userSession");
+
+        model.addAttribute("journalistId", user.getId());
+        return "news-create";
     }
 
-    
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_JOURNALIST')")
     @PostMapping("/add")
     public String createNews(
             @RequestParam String title, @RequestParam String body,
             @RequestParam String journalistId,
-            @RequestParam MultipartFile photo,ModelMap model) {
-
+            @RequestParam MultipartFile image, ModelMap model) {
         try {
-            newsService.createNews(title, body,photo, journalistId);
+            newsService.createNews(title, body, image, journalistId);
 
             model.put("newsAdded", "added successfully");
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());
-            return "create";
+            model.put("journalistId", journalistId);
+            return "news-create";
         }
+        System.out.println("llego hasta acá");
         return "redirect:/news";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_JOURNALIST')")
     @GetMapping("/modify/{id}")
     public String modifyNews(@PathVariable String id, ModelMap model) {
 
         try {
             News news = newsService.getNewsById(id);
-
             model.put("news", news);
-            List<Journalist> journalists = journalistService.getAllJournalists();
-            model.put("journalists", journalists);
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());
             return "news-table";
@@ -97,11 +86,10 @@ public class NewsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/modify/{id}")
     public String modifyNews(@PathVariable String id, @RequestParam String title,
-            @RequestParam String body,@RequestParam MultipartFile photo,
-            @RequestParam String journalistId, ModelMap model) {
+            @RequestParam String body, @RequestParam MultipartFile photo, ModelMap model) {
 
         try {
-            newsService.modifyNews(id, title, body, photo, journalistId);
+            newsService.modifyNews(id, title, body, photo);
 
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());

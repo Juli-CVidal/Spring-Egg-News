@@ -4,10 +4,10 @@
 package com.egg.noticias.controllers;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.NewsUser;
+import com.egg.noticias.entities.Account;
 import com.egg.noticias.enums.Roles;
 import com.egg.noticias.exceptions.NewsException;
-import com.egg.noticias.services.NewsUserService;
+import com.egg.noticias.services.AccountService;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,12 +25,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class PortalController {
 
     @Autowired
-    private NewsUserService userService;
+    private AccountService accountService;
 
     @GetMapping("/sign_in")
     public String signInForm(@RequestParam(required = false) String error, ModelMap model) {
         if (null != error) {
-            model.put("error", "Incorrect username or password");
+            model.put("error", "Wrong username or password");
         }
         model.put("action", "sign_in");
         model.put("roles", Roles.values());
@@ -47,15 +47,15 @@ public class PortalController {
     @PostMapping("/signup")
     public String signUpUser(
             @RequestParam String name,
-            @RequestParam String email,
             @RequestParam String password,
-            String confirm,
+            @RequestParam String confirm,
             @RequestParam Roles role,
-            @RequestParam(required = false) MultipartFile photo,
+            @RequestParam MultipartFile photo,
             ModelMap model) {
 
         try {
-            userService.signup(name, email, password, confirm, role, photo);
+            accountService.signup(name, password, confirm, role, photo);
+            model.put("name", name);
             model.put("action", "sign_in");
         } catch (NewsException ne) {
             model.put("error", ne.getMessage());
@@ -63,21 +63,20 @@ public class PortalController {
             model.put("action", "sign_up");
         } finally {
             model.put("roles", Roles.values());
-            model.put("email", email);
         }
         return "logs.html";
     }
 
     @GetMapping("/")
     public String index(HttpSession session) {
-        NewsUser user = (NewsUser) session.getAttribute("userSession");
+        Account user = (Account) session.getAttribute("userSession");
         return "index.html";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_JOURNALIST')")
     @GetMapping("/profile")
     public String profile(ModelMap model, HttpSession session) {
-        NewsUser user = (NewsUser) session.getAttribute("userSession");
+        Account user = (Account) session.getAttribute("userSession");
         model.put("user", user);
         return "profile-modify";
     }
@@ -85,14 +84,14 @@ public class PortalController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_JOURNALIST')")
     @PostMapping("/profile/{id}")
     public String update(MultipartFile photo, @PathVariable String id,
-            @RequestParam String name, @RequestParam String email,
-            @RequestParam String password, @RequestParam String confirm,
+            @RequestParam String name, @RequestParam String password,
+            @RequestParam String confirm,
             ModelMap model, HttpSession session) {
-            NewsUser user = (NewsUser) session.getAttribute("userSession");
-            
+
+        Account user = (Account) session.getAttribute("userSession");
         try {
-            userService.update(id, name, email, password, confirm, photo);
-            return user.getRole() == Roles.JOURNALIST ? "journalist-table" : "index";
+            accountService.update(id, name, password, confirm, photo);
+            return user.getAccountType() == Roles.USER ? "index" : "journalist-table";
         } catch (NewsException ne) {
             model.put("user", user);
             model.put("error", ne.getMessage());

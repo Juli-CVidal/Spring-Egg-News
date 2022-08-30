@@ -23,43 +23,40 @@
             <div class="meta">
 
                 <img  th:if="${news.image != null}" class="photo" th:src="@{/image/image/__${news.image.id}__}"></img>
-                    
+
                 <div th:if="${news.image == null}" class="photo defaultPhoto"></div>
-                    <ul class="details">
-                        <li class="author">
-                            <span>&#128100;</span><span th:text="${news.journalist.name}"></span>
-                        </li>
-                        <li class="date">
-                            <span>&#128197;</span>
-                            <span th:text="${news.releaseDate.getDate()}"></span>
-                            /
-                            <span th:text="${news.releaseDate.getMonth()}"></span>
-                        </li>
-                        <li sec:authorize="hasRole('ADMIN')">
-                            <div style="float: left">
-                                <a class="btn btn-outline-warning btn-sm"
-                                   th:href="@{../news/modify/__${news.id}__}">
-                                    Modify
-                                </a>
-                            </div>
-                            <div style="float: right; margin-right: 10px">
+                <ul class="details">
+                    <li class="author">
+                        <span>&#128100;</span><span th:text="${news.creator.name}"></span>
+                    </li>
+                    <li class="date">
+                        <span>&#128197;</span>
+                        <span th:text="${news.releaseDate.getDate()}"></span>
+                        /
+                        <span th:text="${news.releaseDate.getMonth()}"></span>
+                    </li>
 
-                                <form th:action="@{../news/delete/__${news.id}__}" method="POST">
-                                    <button class="btn btn-outline-danger btn-sm">Delete</button>
-                                </form>
-                            </div>
+                    <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_JOURNALIST')">
+                        <div style="float: left">
+                            <a class="btn btn-outline-warning btn-sm"
+                               th:href="@{../news/modify/__${news.id}__}">
+                                Modify
+                            </a>
+                        </div>
+                        <div sec:authorize="hasRole('ROLE_ADMIN')" style="float: right; margin-right: 10px">
+                            <form th:action="@{../news/delete/__${news.id}__}" method="POST">
+                                <button class="btn btn-outline-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
 
-                        </li>
-                    </ul>
+                    </li>
+                </ul>
             </div>
             <div class="description">
                 <h1 th:text="${news.title}"></h1>
                 <p th:text="${news.body}"></p>
             </div>
         </div>
-
-
-
         <a th:href="@{../news/create}" class="button">
             CREATE
         </a>

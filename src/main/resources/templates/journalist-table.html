@@ -26,25 +26,17 @@
                 <div th:if="${journalist.image == null}" class="imgBx defaultPhoto"></div>
                 <div class="details">
                     <h2 th:text="${journalist.name}"></h2>
-                    <div sec:authorize="hasRole('ADMIN')">
+                    <h2 th:if="${userId == journalist.id}">You!</h2>
+                    <h2 th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.noticias.enums.Roles).ADMIN)}" sec:authorize="hasRole('ADMIN')">Is an Admin,can't dismiss</h2>
+                    <div th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.noticias.enums.Roles).JOURNALIST)}" sec:authorize="hasRole('ADMIN')">
 
-                        <div style="float:left; margin-left: 15px">
-                            <a class="btn btn-outline-warning btn-sm"
-                               th:href="@{../journalist/modify/__${journalist.id}__}">
-                                Modify
-                            </a>
-                        </div>
-                        <div style="float:right; margin-right: 15px">
-                            <form th:action="@{../journalist/delete/__${journalist.id}__}" method="POST">
-                                <button class="btn btn-outline-danger btn-sm">Delete</button>
-                            </form>
-                        </div>
+                        <form th:action="@{../journalist/delete/__${journalist.id}__}" method="POST">
+                            <button class="button">Dismiss</button>
+                        </form>
+
                     </div>
                 </div>
             </div>
-            <a sec:authorize="hasRole('ROLE_ADMIN')"th:href="@{../journalist/create}" class="button">
-                CREATE
-            </a>
         </div>
     </body>
 </html>
