@@ -91,7 +91,11 @@ public class PortalController {
         Account user = (Account) session.getAttribute("userSession");
         try {
             accountService.update(id, name, password, confirm, photo);
-            return user.getAccountType() == Roles.USER ? "index" : "journalist-table";
+            if (user.getAccountType() == Roles.USER){
+                return "index";
+            }
+            model.put("journalists", accountService.getJournalistsAndAdmins());
+            return "journalist-table";
         } catch (NewsException ne) {
             model.put("user", user);
             model.put("error", ne.getMessage());

@@ -36,6 +36,10 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private BCryptPasswordEncoder pswdEncoder;
+
+    //***RELATED TO SIGN IN AND SIGN UP
     @Transactional
     public void signup(String name, String password,
             String confirm, Roles role,
@@ -50,79 +54,12 @@ public class AccountService implements UserDetailsService {
         repository.save(user);
     }
 
-    @Transactional
-    public void update(String id, String name,
-            String password, String confirm,
-            MultipartFile newImage) throws NewsException {
-        validate(name, password, newImage);
-
-        if (!new BCryptPasswordEncoder().matches(confirm, password)) {
-            throw new NewsException("Incorrect password, retry");
-        }
-
-        if (null == id || id.isEmpty()) {
-            throw new NewsException("No id entered");
-        }
-
-        Account user = getUserById(id);
-        user.setName(name);
-        updateImage(user, user.getImage(), newImage);
-
-        repository.save(user);
-    }
-
-    @Transactional(readOnly = true)
-    public Account getUserById(String id) throws NewsException {
-        return repository.searchAccountById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Account getJournalistById(String id) throws NewsException {
-        return repository.searchJournalistById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Account getAdminById(String id) throws NewsException {
-        return repository.searchAdminById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Account> getJournalistsAndAdmins() {
-        List<Account> journalistAndAdmins = new ArrayList();
-        journalistAndAdmins.addAll(repository.getAllAdmins());
-        journalistAndAdmins.addAll(repository.getAllJournalists());
-        return journalistAndAdmins;
-
-    }
-
-    @Transactional
-    public void dismissJournalist(String id) throws NewsException {
-        Account user = getUserById(id);
-        if (null == user) {
-            throw new NewsException("No account found");
-        }
-        if (user.getAccountType() != Roles.JOURNALIST) {
-            throw new NewsException("The account belongs to a " + user.getAccountType() + ", it cannot be terminated");
-        }
-        user.setAccountType(Roles.USER);
-        repository.save(user);
-    }
-
     private void setData(Account user, String name, String password, Roles role, MultipartFile photo) throws NewsException {
         user.setName(name);
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setPassword(pswdEncoder.encode(password));
         user.setAccountType(role);
         Image image = imageService.save(photo);
         user.setImage(image);
-    }
-
-    //If the account did not have an associated image, I generate one, otherwise I modify the current one.
-    private void updateImage(Account user, Image oldImage, MultipartFile newImage) throws NewsException {
-        if (null == oldImage || null == oldImage.getId()) {
-            user.setImage(imageService.save(newImage));
-        } else {
-            user.setImage(imageService.update(newImage, oldImage.getId()));
-        }
     }
 
     @Override
@@ -146,8 +83,76 @@ public class AccountService implements UserDetailsService {
         return new User(newsUser.getName(), newsUser.getPassword(), permissions);
     }
 
-    private void validate(String name,
-            String password, MultipartFile photo) throws NewsException {
+    //RELATED TO CHANGE THE ACCOUNT    @Transactional
+    public void update(String id, String name,
+            String password, String confirm,
+            MultipartFile newImage) throws NewsException {
+        validate(id, name, password);
+
+        if (!pswdEncoder.matches(confirm, password)) {
+            throw new NewsException("Incorrect password, retry");
+        }
+
+        Account user = getUserById(id);
+        user.setName(name);
+
+        //If the user has not posted a new photo, the previous one will be kept
+        if (null != newImage && !newImage.isEmpty()) {
+            updateImage(user, user.getImage(), newImage);
+        }
+
+        repository.save(user);
+    }
+
+    private void updateImage(Account user, Image oldImage, MultipartFile newImage) throws NewsException {
+        //If the account did not have an associated image, I generate one, otherwise I modify the current one.
+        if (null == oldImage || null == oldImage.getId()) {
+            user.setImage(imageService.save(newImage));
+        } else {
+            user.setImage(imageService.update(newImage, oldImage.getId()));
+        }
+    }
+
+    //RELATED TO GET USERS
+    @Transactional(readOnly = true)
+    public Account getUserById(String id) throws NewsException {
+        return repository.searchAccountById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Account getJournalistById(String id) throws NewsException {
+        return repository.searchJournalistById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Account getAdminById(String id) throws NewsException {
+        return repository.searchAdminById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Account> getJournalistsAndAdmins() {
+        List<Account> journalistAndAdmins = new ArrayList();
+        journalistAndAdmins.addAll(repository.getAllAdmins());
+        journalistAndAdmins.addAll(repository.getAllJournalists());
+        return journalistAndAdmins;
+    }
+
+    @Transactional
+    //SOFT DELETE (Change AccountType to User)
+    public void dismissJournalist(String id) throws NewsException {
+        Account user = getUserById(id);
+        if (null == user) {
+            throw new NewsException("No account found");
+        }
+        if (user.getAccountType() != Roles.JOURNALIST) {
+            throw new NewsException("The account belongs to a " + user.getAccountType() + ", it cannot be dismissed");
+        }
+        user.setAccountType(Roles.USER);
+        repository.save(user);
+    }
+
+    //VALIDATIONS
+    private void validate(String name, String password) throws NewsException {
         if (null == name || name.isEmpty()) {
             throw new NewsException("No valid name entered");
         }
@@ -155,9 +160,19 @@ public class AccountService implements UserDetailsService {
         if (null == password || password.isEmpty() || 8 > password.length()) {
             throw new NewsException("No valid password entered, try again");
         }
+    }
 
+    private void validate(String name, String password, MultipartFile photo) throws NewsException {
+        validate(name, password);
         if (null == photo || photo.isEmpty()) {
             throw new NewsException("No valid image entered");
+        }
+    }
+
+    private void validate(String id, String name, String password) throws NewsException {
+        validate(name, password);
+        if (null == id || id.isEmpty()) {
+            throw new NewsException("No valid id entered");
         }
     }
 }
