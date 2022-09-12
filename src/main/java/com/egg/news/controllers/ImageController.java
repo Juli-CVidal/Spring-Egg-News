@@ -1,12 +1,12 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.controllers;
+package com.egg.news.controllers;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.Image;
-import com.egg.noticias.entities.Account;
-import com.egg.noticias.repositories.ImageRepository;
+import com.egg.news.entities.Image;
+import com.egg.news.entities.Account;
+import com.egg.news.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.egg.noticias.repositories.AccountRepository;
+import com.egg.news.repositories.AccountRepository;
 
 @Controller
 @RequestMapping("/image")

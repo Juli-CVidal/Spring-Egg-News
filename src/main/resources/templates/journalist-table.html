@@ -27,8 +27,8 @@
                 <div class="details">
                     <h2 th:text="${journalist.name}"></h2>
                     <h2 th:if="${userId == journalist.id}">You!</h2>
-                    <h2 th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.noticias.enums.Roles).ADMIN)}" sec:authorize="hasRole('ADMIN')">Is an Admin,can't dismiss</h2>
-                    <div th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.noticias.enums.Roles).JOURNALIST)}" sec:authorize="hasRole('ADMIN')">
+                    <h2 th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.news.enums.Roles).ADMIN)}" sec:authorize="hasRole('ADMIN')">Is an Admin,can't dismiss</h2>
+                    <div th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.news.enums.Roles).JOURNALIST)}" sec:authorize="hasRole('ADMIN')">
 
                         <form th:action="@{../journalist/delete/__${journalist.id}__}" method="POST">
                             <button class="button">Dismiss</button>

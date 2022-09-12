@@ -1,10 +1,10 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.repositories;
+package com.egg.news.repositories;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.News;
+import com.egg.news.entities.News;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

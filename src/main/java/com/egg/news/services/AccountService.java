@@ -1,13 +1,13 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.services;
+package com.egg.news.services;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.Image;
-import com.egg.noticias.enums.Roles;
-import com.egg.noticias.entities.Account;
-import com.egg.noticias.exceptions.NewsException;
+import com.egg.news.entities.Image;
+import com.egg.news.enums.Roles;
+import com.egg.news.entities.Account;
+import com.egg.news.exceptions.NewsException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
-import com.egg.noticias.repositories.AccountRepository;
+import com.egg.news.repositories.AccountRepository;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -36,8 +36,11 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private BCryptPasswordEncoder pswdEncoder;
+    private final BCryptPasswordEncoder pswdEncoder;
+
+    public AccountService() {
+        this.pswdEncoder = new BCryptPasswordEncoder();
+    }
 
     //***RELATED TO SIGN IN AND SIGN UP
     @Transactional

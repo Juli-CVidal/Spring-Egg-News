@@ -1,7 +1,7 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.exceptions;
+package com.egg.news.exceptions;
 
 /**
  *

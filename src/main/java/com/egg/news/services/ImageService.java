@@ -1,12 +1,12 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.services;
+package com.egg.news.services;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.Image;
-import com.egg.noticias.exceptions.NewsException;
-import com.egg.noticias.repositories.ImageRepository;
+import com.egg.news.entities.Image;
+import com.egg.news.exceptions.NewsException;
+import com.egg.news.repositories.ImageRepository;
 import java.io.IOException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

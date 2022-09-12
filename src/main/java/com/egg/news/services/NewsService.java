@@ -1,14 +1,14 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.services;
+package com.egg.news.services;
 
 // @author JulianCVidal
-import com.egg.noticias.entities.Account;
-import com.egg.noticias.entities.News;
-import com.egg.noticias.enums.Roles;
-import com.egg.noticias.exceptions.NewsException;
-import com.egg.noticias.repositories.NewsRepository;
+import com.egg.news.entities.Account;
+import com.egg.news.entities.News;
+import com.egg.news.enums.Roles;
+import com.egg.news.exceptions.NewsException;
+import com.egg.news.repositories.NewsRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

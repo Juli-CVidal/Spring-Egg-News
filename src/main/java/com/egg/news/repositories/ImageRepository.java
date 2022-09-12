@@ -1,9 +1,9 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.repositories;
+package com.egg.news.repositories;
 
-import com.egg.noticias.entities.Image;
+import com.egg.news.entities.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

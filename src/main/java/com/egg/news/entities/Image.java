@@ -1,7 +1,7 @@
 /*
 // Curso Egg FullStack
  */
-package com.egg.noticias.entities;
+package com.egg.news.entities;
 
 // @author JulianCVidal
 import javax.persistence.Basic;

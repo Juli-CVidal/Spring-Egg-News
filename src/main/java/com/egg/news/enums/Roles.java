@@ -2,7 +2,7 @@
 // Curso Egg FullStack
  */
 
-package com.egg.noticias.enums;
+package com.egg.news.enums;
 
 // @author JulianCVidal
 
