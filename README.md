@@ -15,6 +15,21 @@
 * #### The journalist can view, create and modify news
 * #### The administrator can create, view and modify news, as well as dismiss journalists.
 
+## Requirements
+- [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Maven 3](https://maven.apache.org)
+
+## Running the application locally
+
+There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `main.java.com.egg.news.newsApplication` class from your IDE.
+
+Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
+
+```shell
+mvn spring-boot:run
+```
+  
+
 ### Preview of sign in and sign up forms:
 <div>
   <img src= "https://github.com/Juli-CVidal/Spring-Egg-News/blob/master/previews/Sign%20forms.gif"/>
@@ -31,19 +46,4 @@
   <img src= "https://github.com/Juli-CVidal/Spring-Egg-News/blob/master/previews/Journalists.gif"/>
 </div>
 
-
-## Requirements
-- [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-- [Maven 3](https://maven.apache.org)
-
-## Running the application locally
-
-There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `main.java.com.egg.news.newsApplication` class from your IDE.
-
-Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
-
-```shell
-mvn spring-boot:run
-```
-  
 #### If you have any questions, feel free to contact me!
