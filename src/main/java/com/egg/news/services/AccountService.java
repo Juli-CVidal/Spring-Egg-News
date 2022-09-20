@@ -86,7 +86,8 @@ public class AccountService implements UserDetailsService {
         return new User(newsUser.getName(), newsUser.getPassword(), permissions);
     }
 
-    //RELATED TO CHANGE THE ACCOUNT    @Transactional
+    //RELATED TO CHANGE THE ACCOUNT
+    @Transactional
     public void update(String id, String name,
             String password, String confirm,
             MultipartFile newImage) throws NewsException {
@@ -101,19 +102,16 @@ public class AccountService implements UserDetailsService {
 
         //If the user has not posted a new photo, the previous one will be kept
         if (null != newImage && !newImage.isEmpty()) {
-            updateImage(user, user.getImage(), newImage);
+            user.setImage(updateImage(user.getImage(), newImage));
         }
 
         repository.save(user);
     }
 
-    private void updateImage(Account user, Image oldImage, MultipartFile newImage) throws NewsException {
-        //If the account did not have an associated image, I generate one, otherwise I modify the current one.
-        if (null == oldImage || null == oldImage.getId()) {
-            user.setImage(imageService.save(newImage));
-        } else {
-            user.setImage(imageService.update(newImage, oldImage.getId()));
-        }
+    //If the account did not have an associated image, I generate one, otherwise I modify the current one.
+    private Image updateImage(Image oldImage, MultipartFile newImage) throws NewsException {
+        return null == oldImage || null == oldImage.getId() ? imageService.save(newImage) : imageService.update(newImage, oldImage.getId());
+
     }
 
     //RELATED TO GET USERS

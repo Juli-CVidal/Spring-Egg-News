@@ -29,8 +29,6 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @Autowired
-    private AccountService accountService;
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_JOURNALIST')")
     @GetMapping
@@ -83,7 +81,7 @@ public class NewsController {
         return "news-modify";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_JOURNALIST')")
     @PostMapping("/modify/{id}")
     public String modifyNews(@PathVariable String id, @RequestParam String title,
             @RequestParam String body, @RequestParam MultipartFile photo, ModelMap model) {
