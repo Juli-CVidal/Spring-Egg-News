@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head th:replace="/fragments/formsHead ::head"></head>
+    <body>
+        <nav th:replace="/fragments/navbar :: nav"></nav>
+
+        <div class="content">
+            <div class="container-xl">
+                <div class="row align-items-stretch justify-content-center no-gutters">
+                    <div class="col-lg-7">
+                        <div class="form h-100 contact-wrap p-5">
+                            <h3 class="text-center">Modifying a new!</h3>
+                            <form
+                                class="mb-5 needs-validation"
+                                id="contactForm"
+                                name="contactForm"
+                                autocomplete="off"
+                                method="POST"
+                                th:action="@{/news/modify/__${news.id}__}"
+                                enctype="multipart/form-data"
+                                novalidate
+                                >
+                                <input hidden type="text" name="id" th:value="${news.id}"/>
+                                <input hidden type="text" name="journalistName" th:value="${news.creator.name}"/>
+                                <div class="row">
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="title" class="col-form-label">Title *</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="title"
+                                            id="title"
+                                            th:placeholder="|Current title: ${news.title}|"
+                                            required
+                                            />
+                                        <div class="invalid-feedback">Enter a valid title</div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-5">
+                                    <div class="col-md-12 form-group mb-3">
+                                        <label for="body" class="col-form-label">Body *</label>
+                                        <textarea
+                                            class="form-control"
+                                            name="body"
+                                            id="body"
+                                            cols="30"
+                                            rows="4"
+                                            th:placeholder="${news.body}"
+                                            required
+                                            ></textarea>
+                                        <div class="invalid-feedback">Enter a body</div>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <input
+                                            type="file"
+                                            name="photo"
+                                            class="form-control form-control-sm"
+                                            id="photo"
+                                            accept="image/*"
+                                            required/>
+                                        <div class="invalid-feedback">Select a photo</div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-5 form-group text-center">
+                                        <button type="submit" class="button">Modify</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        ></script>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+// Curso Egg FullStack
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Egg news!</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            />
+
+        <link rel='stylesheet' th:href="@{../css/navbar.css}"/>
+        <link rel="stylesheet" th:href="@{../css/journalist.css}" type="text/css"/>
+    </head>
+
+    <body>
+        <nav th:replace="/fragments/navbar :: nav"></nav>
+        <div class="box">
+            <div th:each="journalist : ${journalists}" class="card">
+                <div class="imgBx" th:if="${journalist.image != null}" th:style="'background: url(' + @{/image/image/__${journalist.image.id}__} + '); background-size:cover'"></div>
+                <div th:if="${journalist.image == null}" class="imgBx defaultPhoto"></div>
+                <div class="details">
+                    <h2 th:text="${journalist.name}"></h2>
+                    <h2 th:if="${userId == journalist.id}">You!</h2>
+                    <h2 th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.news.enums.Roles).ADMIN)}" sec:authorize="hasRole('ADMIN')">Is an Admin,can't dismiss</h2>
+                    <div th:if="${(userId != journalist.id) && (journalist.accountType == T(com.egg.news.enums.Roles).JOURNALIST)}" sec:authorize="hasRole('ADMIN')">
+
+                        <form th:action="@{../journalist/delete/__${journalist.id}__}" method="POST">
+                            <button class="button">Dismiss</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
